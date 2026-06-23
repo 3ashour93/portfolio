@@ -1,0 +1,52 @@
+---
+interface Props {
+  showBack?: boolean;
+  profile: {
+    name: string;
+    available: boolean;
+    email: string;
+    links: {
+      linkedin: string;
+      behance: string;
+      vimeo: string;
+    };
+  };
+}
+const { showBack = false, profile } = Astro.props;
+---
+
+<nav id="nav">
+  {showBack ? (
+    <a class="n-back" href="/">All Projects</a>
+  ) : (
+    <div class="n-avail">
+      {profile.available && <span class="n-dot"></span>}
+      {profile.available ? 'Available for work' : 'Not available'}
+    </div>
+  )}
+
+  <a class="n-logo" href="/">{profile.name}</a>
+
+  <div class="n-links">
+    {!showBack && (
+      <>
+        <a class="n-icon" href={profile.links.linkedin} target="_blank" rel="noopener" aria-label="LinkedIn">
+          <i class="fa-brands fa-linkedin-in"></i>
+        </a>
+        <a class="n-icon" href={profile.links.behance} target="_blank" rel="noopener" aria-label="Behance">
+          <i class="fa-brands fa-behance"></i>
+        </a>
+        <a class="n-icon" href={profile.links.vimeo} target="_blank" rel="noopener" aria-label="Vimeo">
+          <i class="fa-brands fa-vimeo-v"></i>
+        </a>
+      </>
+    )}
+    <a class="n-cta" href={`mailto:${profile.email}`}>Let's Talk</a>
+  </div>
+</nav>
+
+<script>
+  window.addEventListener('scroll', () => {
+    document.getElementById('nav')?.classList.toggle('pinned', window.scrollY > 50);
+  }, { passive: true });
+</script>

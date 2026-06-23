@@ -1,0 +1,15 @@
+{
+  "name": "omar-ashour-portfolio",
+  "type": "module",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "astro dev",
+    "generate-images": "node scripts/generate-images.js",
+    "build": "npm run generate-images && astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "astro": "^6.1.5"
+  }
+}

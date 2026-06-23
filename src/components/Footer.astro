@@ -1,0 +1,24 @@
+---
+interface Props {
+  profile: {
+    name: string;
+    links: {
+      linkedin: string;
+      behance: string;
+      vimeo: string;
+    };
+  };
+}
+const { profile } = Astro.props;
+const year = new Date().getFullYear();
+---
+
+<footer>
+  <span class="f-copy">© {year} {profile.name}</span>
+  <div class="f-links">
+    <a href="/">Work</a>
+    <a href={profile.links.linkedin} target="_blank" rel="noopener">LinkedIn</a>
+    <a href={profile.links.behance} target="_blank" rel="noopener">Behance</a>
+    <a href={profile.links.vimeo} target="_blank" rel="noopener">Vimeo</a>
+  </div>
+</footer>

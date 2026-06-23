@@ -1,0 +1,31 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+.astro/
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Netlify
+.netlify/
+
+# Editors
+.vscode/
+.idea/
+*.swp
+
+# Orphan PNGs replaced by .jpg versions (no longer referenced)
+public/images/projects/arabesque/rosette.png
+public/images/projects/arabesque/pattern-view.png
+public/images/projects/arabesque/gallery.png
+public/images/projects/arabesque/generator.png
+public/images/projects/arabesque/admin.png
+public/images/projects/soul-broth/Soul Broth Brand Guide.jpg

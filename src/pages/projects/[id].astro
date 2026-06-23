@@ -1,0 +1,655 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { PROJECTS } from '../../data/projects';
+import type { Project } from '../../data/projects';
+
+export function getStaticPaths() {
+  return PROJECTS.map((p) => ({
+    params: { id: p.id },
+    props: { project: p },
+  }));
+}
+
+interface Props {
+  project: Project;
+}
+
+const { project: p } = Astro.props;
+
+// Compute prev/next directly from array — bulletproof, no prop dependency
+const currentIndex = PROJECTS.findIndex((x) => x.id === p.id);
+const prevProject = PROJECTS[currentIndex > 0 ? currentIndex - 1 : PROJECTS.length - 1];
+const nextProject = PROJECTS[currentIndex < PROJECTS.length - 1 ? currentIndex + 1 : 0];
+---
+
+<Layout
+  title={`${p.title} — Omar Ashour`}
+  description={p.teaser}
+  showBack={true}
+>
+
+<!-- ── PROJECT HERO ── -->
+<section id="proj-hero">
+  <div class="ph-bg" id="phBg" style={`background-image: url('${p.heroImage}')`}></div>
+  <div class="ph-cat">{p.category}</div>
+  <h1 class="ph-title" set:html={p.title.replace(/(\S+)\s*$/, '<em>$1</em>')}></h1>
+  {p.badge && <div class="ph-badge">{p.badge}</div>}
+  <div class="ph-meta">
+    <div class="pm"><div class="pm-k">Client</div><div class="pm-v">{p.client}</div></div>
+    <div class="pm"><div class="pm-k">Role</div><div class="pm-v">{p.role}</div></div>
+    <div class="pm"><div class="pm-k">Year</div><div class="pm-v">{p.year}</div></div>
+    <div class="pm"><div class="pm-k">Tools</div><div class="pm-v">{p.tools.join(' · ')}</div></div>
+  </div>
+</section>
+
+<!-- ── BODY ── -->
+<div class="proj-body">
+
+  <!-- Overview -->
+  <div class="ov r">
+    <div>
+      <div class="ov-label">Overview</div>
+      <h2 class="ov-heading">{p.title}</h2>
+      {p.websiteUrl && (
+        <a class="ov-visit" href={p.websiteUrl} target="_blank" rel="noopener">
+          <span>{p.websiteLabel || 'Visit Website'}</span>
+          <span class="ov-visit-arr">↗</span>
+        </a>
+      )}
+    </div>
+    <div class="ov-text">
+      <p>{p.overview}</p>
+      {p.tags && p.tags.length > 0 && (
+        <div class="ov-services">
+          <div class="ov-services-label">Services</div>
+          <div class="ov-services-pills">
+            {p.tags.map((t) => <span class="ov-pt-tag">{t}</span>)}
+          </div>
+        </div>
+      )}
+    </div>
+  </div>
+
+  <!-- Brief · Approach · Outcome columns -->
+  <div class="sections">
+    <div class="s-col r">
+      <div class="sc-num">01</div>
+      <div class="sc-title">The Brief</div>
+      <div class="sc-body">{p.brief}</div>
+    </div>
+    <div class="s-col r d1">
+      <div class="sc-num">02</div>
+      <div class="sc-title">The Approach</div>
+      <div class="sc-body">{p.approach}</div>
+    </div>
+    <div class="s-col r d2">
+      <div class="sc-num">03</div>
+      <div class="sc-title">The Outcome</div>
+      <div class="sc-body">{p.outcome}</div>
+    </div>
+  </div>
+
+  <!-- Top-level embeds (interactive iframes) -->
+  {p.embeds && p.embeds.length > 0 && (
+    <div class="embeds-wrap r">
+      {p.embeds.map((emb) => (
+        <div class="embed-block">
+          <div class="embed-head">
+            <div class="embed-title">{emb.title}</div>
+            {emb.description && <div class="embed-desc">{emb.description}</div>}
+          </div>
+          <div class="embed-frame" style={`aspect-ratio:${emb.aspectRatio || '16/9'}; height:${emb.height || 'auto'}`}>
+            <iframe src={emb.url} frameborder="0" allowfullscreen loading="lazy"></iframe>
+          </div>
+        </div>
+      ))}
+    </div>
+  )}
+
+  <!-- Main image grid (if no sections, or supplemental) -->
+  {p.images && p.images.length > 0 && (
+    <div
+      class={`img-grid r${p.imageLayout === 'stack' ? ' img-stack' : p.imageLayout === 'masonry' ? ` img-masonry${p.masonryColumns ? ' custom-cols' : ''}` : ''}`}
+      style={p.masonryColumns ? `--cols-d:${p.masonryColumns.desktop};--cols-t:${p.masonryColumns.tablet || p.masonryColumns.mobile};--cols-m:${p.masonryColumns.mobile}` : undefined}
+    >
+      {p.imageLayout === 'masonry' && <div class="masonry-gutter"></div>}
+      {p.images.map((src, i) => (
+        <div class="ig-cell">
+          <img src={src} alt={`${p.title} ${i + 1}`} style="opacity:0" onload="this.style.opacity=1" onerror="this.style.opacity=0" />
+        </div>
+      ))}
+    </div>
+  )}
+
+  <!-- Placeholder block (no images yet) -->
+  {p.placeholder && (!p.images || p.images.length === 0) && (!p.sections || p.sections.length === 0) && (
+    <div class="proj-placeholder r">
+      <div class="pp-inner">
+        <div class="pp-label">Case Study In Progress</div>
+        <div class="pp-title">Visual material coming soon</div>
+        <div class="pp-body">This project's visual case study is being prepared. In the meantime, please reach out for samples or visit Behance for a live preview.</div>
+      </div>
+    </div>
+  )}
+
+  <!-- Sections (mega-projects) -->
+  {p.sections && p.sections.map((sec) => {
+    const hasEmbeds = sec.embeds && sec.embeds.length > 0;
+    return (
+    <section class="proj-section r" id={sec.id}>
+      {hasEmbeds ? (
+        <div class="ps-split">
+          <div class="ps-head ps-head-col">
+            <div class="ps-label">{sec.title}</div>
+            {sec.subtitle && <div class="ps-sub">{sec.subtitle}</div>}
+            {sec.body && <p class="ps-body">{sec.body}</p>}
+          </div>
+          <div class="ps-embed-col">
+            {sec.embeds.map((emb) => (
+              <div class="embed-block">
+                <div class="embed-head">
+                  <div class="embed-title">{emb.title}</div>
+                  {emb.description && <div class="embed-desc">{emb.description}</div>}
+                </div>
+                <div class="embed-frame" style={`aspect-ratio:${emb.aspectRatio || '16/9'}; height:${emb.height || 'auto'}`}>
+                  <iframe src={emb.url} frameborder="0" allowfullscreen loading="lazy"></iframe>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      ) : (
+        <div class="ps-head">
+          <div class="ps-label">{sec.title}</div>
+          {sec.subtitle && <div class="ps-sub">{sec.subtitle}</div>}
+          {sec.body && <p class="ps-body">{sec.body}</p>}
+        </div>
+      )}
+
+      {sec.video && (
+        <div class="ps-video">
+          <video src={sec.video} controls playsinline></video>
+        </div>
+      )}
+
+      {sec.images && sec.images.length > 0 && (
+        <div
+          class={`img-grid${sec.imageLayout === 'stack' ? ' img-stack' : sec.imageLayout === 'masonry' ? ` img-masonry${sec.masonryColumns ? ' custom-cols' : ''}` : ''}`}
+          style={sec.masonryColumns ? `--cols-d:${sec.masonryColumns.desktop};--cols-t:${sec.masonryColumns.tablet || sec.masonryColumns.mobile};--cols-m:${sec.masonryColumns.mobile}` : undefined}
+        >
+          {sec.imageLayout === 'masonry' && <div class="masonry-gutter"></div>}
+          {sec.images.map((src, i) => (
+            <div class="ig-cell">
+              <img src={src} alt={`${sec.title} ${i + 1}`} style="opacity:0" onload="this.style.opacity=1" onerror="this.style.opacity=0" />
+            </div>
+          ))}
+        </div>
+      )}
+    </section>
+    );
+  })}
+
+  <!-- Outcome dark section -->
+  <div class="outcome r">
+    <div>
+      <div class="oc-label">Result</div>
+      <div class="oc-heading">What it<br>delivered.</div>
+    </div>
+    <div>
+      <div class="oc-text">{p.outcome}</div>
+      {p.link && (
+        <a class="oc-link" href={p.link} target="_blank" rel="noopener">
+          {p.linkLabel || 'View Project'} ↗
+        </a>
+      )}
+    </div>
+  </div>
+
+</div>
+
+<!-- ── BOTTOM NAV ── -->
+<div id="proj-footer-nav">
+
+  <!-- Prev / All / Next row -->
+  <div class="pfn-row">
+    <a href={`/projects/${prevProject.id}`} class="pfn-prev">
+      <span class="pfn-label">← Previous</span>
+      <span class="pfn-title">{prevProject.title}</span>
+    </a>
+
+    <a href="/" class="pfn-all">
+      <span class="pfn-all-label">All Work</span>
+      <span class="pfn-all-count">{PROJECTS.length} projects</span>
+    </a>
+
+    <a href={`/projects/${nextProject.id}`} class="pfn-next">
+      <span class="pfn-label">Next →</span>
+      <span class="pfn-title">{nextProject.title}</span>
+    </a>
+  </div>
+
+  <!-- All projects list -->
+  <div class="pfn-list">
+    {PROJECTS.map((proj) => (
+      <a
+        href={`/projects/${proj.id}`}
+        class={`pfn-item${proj.id === p.id ? ' pfn-item-active' : ''}`}
+      >
+        <span class="pfn-item-num">{proj.num}</span>
+        <span class="pfn-item-title">{proj.title}</span>
+      </a>
+    ))}
+  </div>
+
+</div>
+
+</Layout>
+
+<style>
+/* ── PROJECT HERO ── */
+#proj-hero {
+  min-height: 100svh;
+  background: var(--ink);
+  display: flex; flex-direction: column;
+  justify-content: flex-end;
+  padding: clamp(100px, 15vh, 160px) var(--pad-x) var(--pad-y);
+  position: relative; overflow: hidden;
+}
+.ph-bg {
+  position: absolute; inset: 0;
+  background-size: cover; background-position: center;
+  opacity: .15;
+}
+.ph-cat {
+  font-size: .52rem; letter-spacing: .26em; text-transform: uppercase;
+  color: rgba(249,249,247,.35); margin-bottom: 20px;
+  display: flex; align-items: center; gap: 12px;
+  animation: up .8s var(--ease) .15s both;
+}
+.ph-cat::before { content: ''; width: 24px; height: 1px; background: rgba(249,249,247,.3); }
+.ph-title {
+  font-family: var(--f-ser);
+  font-size: clamp(3rem, 8vw, 10rem);
+  font-weight: 300; line-height: .88; letter-spacing: -.03em;
+  color: var(--paper);
+  animation: up 1s var(--ease) .25s both;
+}
+.ph-title em { font-style: italic; color: rgba(249,249,247,.5); }
+.ph-badge {
+  display: inline-block; margin-top: 20px;
+  font-size: .46rem; letter-spacing: .14em; text-transform: uppercase;
+  padding: 5px 12px; background: rgba(249,249,247,.1); color: rgba(249,249,247,.7);
+  border: 1px solid rgba(249,249,247,.15);
+  animation: up .8s var(--ease) .4s both;
+}
+/* Visit Website CTA — sits inside the Overview left column, under the heading */
+.ov-visit {
+  display: inline-flex; align-items: center; gap: 10px;
+  margin-top: clamp(20px, 2.5vw, 32px);
+  font-size: .58rem; letter-spacing: .2em; text-transform: uppercase;
+  text-decoration: none;
+  color: var(--ink);
+  border: 1px solid var(--ink);
+  padding: 14px 26px;
+  transition: background .35s var(--ease), color .35s var(--ease), border-color .35s var(--ease);
+  width: fit-content;
+}
+.ov-visit-arr { font-size: .85rem; transition: transform .35s var(--ease); display: inline-block; }
+.ov-visit:hover { background: var(--accent); color: var(--ink); border-color: var(--accent); }
+.ov-visit:hover .ov-visit-arr { transform: translate(3px, -3px); }
+.ph-meta {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 2px;
+  margin-top: clamp(40px, 6vw, 80px);
+  border-top: 1px solid rgba(249,249,247,.06);
+  padding-top: clamp(28px, 4vw, 48px);
+  animation: up .9s var(--ease) .5s both;
+}
+.pm { padding: 16px 0; }
+.pm-k { font-size: .48rem; letter-spacing: .22em; text-transform: uppercase; color: rgba(249,249,247,.25); margin-bottom: 8px; }
+.pm-v { font-family: var(--f-ser); font-size: .9rem; font-weight: 600; color: var(--paper); line-height: 1.4; }
+@keyframes up { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+@media (max-width: 640px) { .ph-meta { grid-template-columns: 1fr 1fr; } }
+
+/* ── BODY ── */
+.proj-body { background: var(--paper); }
+
+/* Overview */
+.ov { display: grid; grid-template-columns: 1fr 2fr; gap: clamp(32px, 6vw, 80px); padding: var(--pad-y) var(--pad-x); border-bottom: 1px solid var(--rule); }
+.ov-label { font-size: .5rem; letter-spacing: .26em; text-transform: uppercase; color: var(--muted); margin-bottom: 14px; }
+.ov-heading { font-family: var(--f-ser); font-size: clamp(1.6rem, 3vw, 2.8rem); font-weight: 300; letter-spacing: -.02em; line-height: 1.05; }
+.ov-text { font-size: .78rem; line-height: 2; color: var(--muted); padding-top: clamp(40px, 5vw, 60px); }
+.ov-text p + p { margin-top: 16px; }
+
+/* Services pills — inside Overview, right after paragraph */
+.ov-services { margin-top: clamp(28px, 4vw, 44px); }
+.ov-services-label { font-size: .5rem; letter-spacing: .26em; text-transform: uppercase; color: var(--muted); margin-bottom: 16px; }
+.ov-services-pills { display: flex; flex-wrap: wrap; gap: 8px; }
+.ov-pt-tag {
+  display: inline-block;
+  font-size: .72rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  padding: 12px 22px;
+  border: 1.5px solid var(--rule);
+  color: var(--ink);
+  background: transparent;
+}
+
+@media (max-width: 768px) { .ov { grid-template-columns: 1fr; gap: 28px; } .ov-text { padding-top: 0; } }
+
+/* Full hero image */
+.img-hero { width: 100%; aspect-ratio: 16/7; background: rgba(10,10,10,.06); position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+.img-hero img { width: 100%; height: 100%; object-fit: contain; object-position: center; display: block; transition: opacity .6s var(--ease); }
+
+/* 3-col sections */
+.sections { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
+.s-col { padding: clamp(32px, 5vw, 56px) clamp(24px, 3vw, 44px); }
+.s-col + .s-col { border-left: 1px solid var(--rule); }
+.sc-num { font-family: var(--f-ser); font-size: 2rem; font-weight: 300; font-style: italic; color: rgba(10,10,10,.08); line-height: 1; margin-bottom: 20px; }
+.sc-title { font-family: var(--f-ser); font-size: clamp(1rem, 1.8vw, 1.4rem); font-weight: 600; letter-spacing: -.01em; color: var(--ink); margin-bottom: 14px; }
+.sc-body { font-size: .75rem; line-height: 1.95; color: var(--muted); }
+@media (max-width: 768px) { .sections { grid-template-columns: 1fr; } .s-col + .s-col { border-left: none; border-top: 1px solid var(--rule); } }
+
+/* Image grid — dynamic: images show fully regardless of orientation */
+.img-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; background: var(--rule); }
+.ig-cell {
+  background: rgba(10,10,10,.04);
+  position: relative;
+  overflow: hidden;
+  min-height: 260px;
+  max-height: 560px;
+  height: 42vw;        /* scales with viewport, clipped by min/max */
+  display: flex; align-items: center; justify-content: center;
+}
+/* object-fit: contain shows the full image with no cropping.
+   Letterbox/pillarbox areas are filled by the subtle cell background. */
+.ig-cell img {
+  width: 100%; height: 100%;
+  object-fit: contain;
+  object-position: center;
+  display: block;
+  transition: opacity .5s;
+  padding: 12px;       /* small breathing room so image doesn't touch edges */
+}
+@media (max-width: 480px) { .img-grid { grid-template-columns: 1fr; } .ig-cell { height: 80vw; max-height: 480px; } }
+
+/* Stack layout — single column, full-width images one after another */
+.img-stack { grid-template-columns: 1fr; }
+.img-stack .ig-cell {
+  height: auto;
+  min-height: unset;
+  max-height: unset;
+}
+.img-stack .ig-cell img {
+  object-fit: contain;
+  height: auto;
+  width: 100%;
+  padding: 0;
+}
+
+/* Masonry layout — powered by Masonry.js */
+.img-masonry {
+  display: block;
+  background: transparent;
+}
+.img-masonry .ig-cell {
+  width: calc(50% - 1px);
+  height: auto;
+  min-height: unset;
+  max-height: unset;
+  margin-bottom: 2px;
+  float: left;
+}
+.img-masonry .ig-cell img {
+  width: 100%;
+  height: auto;
+  object-fit: unset;
+  padding: 0;
+  display: block;
+}
+/* gutter sizer — Masonry.js uses this element for spacing */
+.img-masonry .masonry-gutter { width: 2px; }
+@media (max-width: 1024px) { .img-masonry:not(.custom-cols) .ig-cell { width: calc(50% - 1px); } }
+@media (max-width: 640px) { .img-masonry:not(.custom-cols) .ig-cell { width: calc(100% - 0px); } }
+
+/* Masonry — custom column counts per project (via --cols-d, --cols-t, --cols-m inline vars) */
+.img-masonry.custom-cols .ig-cell {
+  width: calc((100% - (var(--cols-d) - 1) * 2px) / var(--cols-d));
+}
+@media (max-width: 1024px) {
+  .img-masonry.custom-cols .ig-cell {
+    width: calc((100% - (var(--cols-t) - 1) * 2px) / var(--cols-t));
+  }
+}
+@media (max-width: 640px) {
+  .img-masonry.custom-cols .ig-cell {
+    width: calc((100% - (var(--cols-m) - 1) * 2px) / var(--cols-m));
+  }
+}
+
+/* Project sections (mega-projects) */
+.proj-section { border-top: 1px solid var(--rule); }
+.ps-head { padding: clamp(40px, 6vw, 72px) var(--pad-x) clamp(20px, 3vw, 36px); max-width: 1200px; }
+.ps-label { font-family: var(--f-ser); font-size: clamp(1.4rem, 2.8vw, 2.4rem); font-weight: 300; letter-spacing: -.02em; color: var(--ink); line-height: 1.05; }
+.ps-sub { font-size: .52rem; letter-spacing: .22em; text-transform: uppercase; color: var(--muted); margin-top: 12px; }
+.ps-body { font-size: .78rem; line-height: 1.95; color: var(--muted); margin-top: 18px; max-width: 72ch; }
+.ps-video { width: 100%; background: #000; }
+.ps-video video { width: 100%; height: auto; display: block; }
+
+/* Split layout — description (1/3) + live demo (2/3) side-by-side */
+.ps-split {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: clamp(24px, 3vw, 48px);
+  padding: clamp(40px, 6vw, 72px) var(--pad-x) clamp(32px, 4vw, 56px);
+  align-items: start;
+}
+.ps-split .ps-head-col { padding: 0; max-width: none; position: sticky; top: clamp(80px, 10vh, 120px); }
+.ps-split .ps-body { max-width: none; }
+.ps-embed-col {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(16px, 2vw, 28px);
+}
+.ps-embed-col .embed-block { background: rgba(10,10,10,.03); border: 1px solid var(--rule); }
+.ps-embed-col .embed-head { padding: 14px 18px; border-bottom: 1px solid var(--rule); }
+.ps-embed-col .embed-title { font-family: var(--f-ser); font-size: .88rem; font-weight: 600; color: var(--ink); }
+.ps-embed-col .embed-desc { font-size: .68rem; color: var(--muted); margin-top: 4px; line-height: 1.5; }
+.ps-embed-col .embed-frame { position: relative; width: 100%; background: #000; }
+.ps-embed-col .embed-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; display: block; border: 0; }
+
+/* Stack the split layout on narrow screens */
+@media (max-width: 900px) {
+  .ps-split { grid-template-columns: 1fr; gap: 24px; }
+  .ps-split .ps-head-col { position: static; }
+}
+
+/* Interactive embeds (iframes) */
+.embeds-wrap { padding: clamp(24px, 4vw, 48px) var(--pad-x); border-bottom: 1px solid var(--rule); display: flex; flex-direction: column; gap: clamp(24px, 3vw, 40px); }
+.embed-block { background: rgba(10,10,10,.03); border: 1px solid var(--rule); }
+.embed-head { padding: 18px 20px; border-bottom: 1px solid var(--rule); }
+.embed-title { font-family: var(--f-ser); font-size: .95rem; font-weight: 600; color: var(--ink); }
+.embed-desc { font-size: .7rem; color: var(--muted); margin-top: 4px; }
+.embed-frame { position: relative; width: 100%; background: #000; }
+.embed-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; display: block; border: 0; }
+
+/* Placeholder block */
+.proj-placeholder { padding: clamp(60px, 10vw, 120px) var(--pad-x); border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); background: rgba(10,10,10,.02); }
+.pp-inner { max-width: 640px; margin: 0 auto; text-align: center; }
+.pp-label { font-size: .48rem; letter-spacing: .26em; text-transform: uppercase; color: var(--muted); margin-bottom: 16px; }
+.pp-title { font-family: var(--f-ser); font-size: clamp(1.4rem, 2.6vw, 2.2rem); font-weight: 300; letter-spacing: -.02em; color: var(--ink); margin-bottom: 14px; }
+.pp-body { font-size: .78rem; line-height: 1.85; color: var(--muted); }
+
+/* Tags */
+.proj-tags { padding: clamp(24px, 4vw, 44px) var(--pad-x); display: flex; flex-wrap: wrap; gap: 8px; align-items: center; border-bottom: 1px solid var(--rule); border-top: 1px solid var(--rule); }
+.pt-label { font-size: .48rem; letter-spacing: .2em; text-transform: uppercase; color: var(--muted); margin-right: 10px; }
+.pt-tag { font-size: .46rem; letter-spacing: .15em; text-transform: uppercase; padding: 7px 13px; border: 1px solid var(--rule); color: var(--muted); }
+
+/* Outcome — accent green */
+.outcome { background: var(--accent); padding: var(--pad-y) var(--pad-x); display: grid; grid-template-columns: 1fr 2fr; gap: clamp(32px, 6vw, 80px); }
+.oc-label { font-size: .5rem; letter-spacing: .26em; text-transform: uppercase; color: rgba(10,10,10,.5); margin-bottom: 14px; }
+.oc-heading { font-family: var(--f-ser); font-size: clamp(1.6rem, 3vw, 2.8rem); font-weight: 300; color: var(--ink); letter-spacing: -.02em; line-height: 1.05; }
+.oc-text { font-size: .78rem; line-height: 2; color: rgba(10,10,10,.72); padding-top: clamp(40px, 5vw, 60px); }
+.oc-link { display: inline-flex; align-items: center; gap: 8px; margin-top: 28px; font-size: .52rem; letter-spacing: .2em; text-transform: uppercase; color: var(--ink); text-decoration: none; border-bottom: 1px solid rgba(10,10,10,.3); padding-bottom: 3px; transition: border-color .3s, transform .3s var(--ease); }
+.oc-link:hover { border-color: var(--ink); transform: translateX(4px); }
+@media (max-width: 768px) { .outcome { grid-template-columns: 1fr; gap: 28px; } .oc-text { padding-top: 0; } }
+
+/* ── BOTTOM NAV ── */
+#proj-footer-nav {
+  background: var(--ink);
+  border-top: 1px solid rgba(249,249,247,.06);
+}
+
+/* Prev / All / Next row */
+.pfn-row {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  border-bottom: 1px solid rgba(249,249,247,.06);
+}
+
+.pfn-prev, .pfn-next, .pfn-all {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: clamp(32px, 5vw, 56px) var(--pad-x);
+  text-decoration: none;
+  cursor: none;
+  transition: background .35s var(--ease);
+  position: relative;
+  overflow: hidden;
+}
+.pfn-prev:hover, .pfn-next:hover { background: rgba(249,249,247,.03); }
+
+.pfn-label {
+  font-size: .46rem;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: rgba(249,249,247,.22);
+  transition: color .3s;
+}
+.pfn-prev:hover .pfn-label,
+.pfn-next:hover .pfn-label { color: var(--accent); }
+
+.pfn-title {
+  font-family: var(--f-ser);
+  font-size: clamp(1rem, 2.2vw, 2rem);
+  font-weight: 300;
+  font-style: italic;
+  color: var(--paper);
+  letter-spacing: -.02em;
+  line-height: 1.05;
+  transition: color .3s;
+}
+.pfn-prev:hover .pfn-title,
+.pfn-next:hover .pfn-title { color: var(--accent); }
+
+.pfn-prev { align-items: flex-start; }
+.pfn-next { align-items: flex-end; text-align: right; }
+
+/* All work centre button */
+.pfn-all {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 8px;
+  border-left: 1px solid rgba(249,249,247,.06);
+  border-right: 1px solid rgba(249,249,247,.06);
+  padding-left: clamp(24px, 4vw, 56px);
+  padding-right: clamp(24px, 4vw, 56px);
+  min-width: 160px;
+}
+.pfn-all:hover { background: rgba(249,249,247,.04); }
+.pfn-all-label {
+  font-family: var(--f-ser);
+  font-size: clamp(.9rem, 1.6vw, 1.2rem);
+  font-weight: 300;
+  color: rgba(249,249,247,.5);
+  transition: color .3s;
+  letter-spacing: -.01em;
+}
+.pfn-all:hover .pfn-all-label { color: var(--accent); }
+.pfn-all-count {
+  font-size: .44rem;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: rgba(249,249,247,.2);
+}
+
+/* All projects list */
+.pfn-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1px;
+  background: rgba(249,249,247,.04);
+}
+.pfn-item {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  padding: 16px var(--pad-x);
+  text-decoration: none;
+  background: var(--ink);
+  transition: background .3s var(--ease), padding-left .35s var(--ease);
+  cursor: none;
+}
+.pfn-item:hover { background: rgba(249,249,247,.04); padding-left: calc(var(--pad-x) + 10px); }
+.pfn-item-active { background: rgba(249,249,247,.06); }
+.pfn-item-num {
+  font-family: var(--f-ser);
+  font-size: .75rem;
+  font-style: italic;
+  font-weight: 300;
+  color: rgba(249,249,247,.18);
+  flex-shrink: 0;
+  min-width: 20px;
+  transition: color .3s;
+}
+.pfn-item-active .pfn-item-num,
+.pfn-item:hover .pfn-item-num { color: var(--accent); }
+.pfn-item-title {
+  font-family: var(--f-ser);
+  font-size: .82rem;
+  font-weight: 600;
+  color: rgba(249,249,247,.45);
+  transition: color .3s;
+}
+.pfn-item-active .pfn-item-title,
+.pfn-item:hover .pfn-item-title { color: var(--paper); }
+
+@media (max-width: 640px) {
+  .pfn-row { grid-template-columns: 1fr; }
+  .pfn-all { border-left: none; border-right: none; border-top: 1px solid rgba(249,249,247,.06); border-bottom: 1px solid rgba(249,249,247,.06); }
+  .pfn-next { align-items: flex-start; text-align: left; }
+  .pfn-list { grid-template-columns: 1fr; }
+}
+</style>
+
+<script>
+// Reveal scroll
+const obs = new IntersectionObserver(
+  (entries) => entries.forEach((e) => { if (e.isIntersecting) e.target.classList.add('in'); }),
+  { threshold: 0.08 }
+);
+document.querySelectorAll('.r').forEach((el) => obs.observe(el));
+</script>
+
+<script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/masonry/4.2.2/masonry.pkgd.min.js"></script>
+<script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/5.0.0/imagesloaded.pkgd.min.js"></script>
+<script is:inline>
+  (function() {
+    var grids = document.querySelectorAll('.img-masonry');
+    if (!grids.length) return;
+    grids.forEach(function(grid) {
+      var msnry = new Masonry(grid, {
+        itemSelector: '.ig-cell',
+        gutter: '.masonry-gutter',
+        percentPosition: true,
+        transitionDuration: '0.3s'
+      });
+      imagesLoaded(grid, function() {
+        msnry.layout();
+      });
+    });
+  })();
+</script>

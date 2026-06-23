@@ -1,0 +1,18 @@
+---
+---
+
+<div id="cur"></div>
+
+<script>
+  const cur = document.getElementById('cur');
+  if (cur) {
+    document.addEventListener('mousemove', (e) => {
+      cur.style.left = e.clientX + 'px';
+      cur.style.top = e.clientY + 'px';
+    });
+    document.querySelectorAll('a, button').forEach((el) => {
+      el.addEventListener('mouseenter', () => cur.classList.add('grow'));
+      el.addEventListener('mouseleave', () => cur.classList.remove('grow'));
+    });
+  }
+</script>

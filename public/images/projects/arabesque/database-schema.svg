@@ -1,0 +1,135 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1100" width="1600" height="1100" font-family="Georgia, 'Times New Roman', serif">
+  <defs>
+    <style>
+      .bg { fill: #f9f9f7; }
+      .accent { fill: #98D5D8; }
+      .accent-light { fill: #E8F4F4; }
+      .ink { fill: #0A0A0A; }
+      .muted { fill: rgba(10,10,10,0.55); }
+      .rule { stroke: rgba(10,10,10,0.18); stroke-width: 1.5; fill: none; }
+      .rule-thick { stroke: rgba(10,10,10,0.55); stroke-width: 2; fill: none; }
+      .conn { stroke: #98D5D8; stroke-width: 2.5; fill: none; }
+      .table-head { font-family: Georgia, serif; font-size: 32px; font-weight: 700; letter-spacing: 0.02em; }
+      .table-sub { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 13px; letter-spacing: 0.18em; text-transform: uppercase; }
+      .field-key { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 17px; font-weight: 600; }
+      .field-val { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 16px; }
+      .title { font-family: Georgia, serif; font-size: 56px; font-weight: 400; letter-spacing: -0.01em; }
+      .subtitle { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 15px; letter-spacing: 0.22em; text-transform: uppercase; }
+      .pk-badge { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 11px; letter-spacing: 0.18em; }
+      .fk-label { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase; }
+    </style>
+    <marker id="arrowhead" markerWidth="14" markerHeight="14" refX="12" refY="7" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,2 L0,12 L12,7 z" fill="#98D5D8" />
+    </marker>
+  </defs>
+
+  <rect class="bg" width="1600" height="1100" />
+
+  <text class="subtitle muted" x="80" y="74">Database Schema</text>
+  <text class="title ink" x="80" y="138">Five tables. One pattern community.</text>
+  <line x1="80" y1="172" x2="320" y2="172" class="rule-thick" />
+
+  <!-- USERS — center top -->
+  <g transform="translate(615, 220)">
+    <rect width="370" height="290" rx="2" fill="#0A0A0A" />
+    <rect x="0" y="0" width="370" height="68" rx="2" fill="#98D5D8" />
+    <text class="table-head" x="28" y="46" fill="#0A0A0A">Users</text>
+    <text class="table-sub" x="28" y="100" fill="rgba(249,249,247,0.55)">Identity · Profile · Auth</text>
+    <line x1="28" y1="115" x2="180" y2="115" stroke="rgba(249,249,247,0.25)" stroke-width="1" />
+    <g fill="#f9f9f7">
+      <text class="field-key" x="28" y="148">id</text>
+      <text class="field-val" x="28" y="173" fill="rgba(249,249,247,0.55)">username · email</text>
+      <text class="field-val" x="28" y="198" fill="rgba(249,249,247,0.55)">password_hash</text>
+      <text class="field-val" x="28" y="223" fill="rgba(249,249,247,0.55)">is_admin · created_at</text>
+      <text class="field-val" x="28" y="248" fill="rgba(249,249,247,0.55)">contribution_points</text>
+      <text class="field-val" x="28" y="273" fill="rgba(249,249,247,0.55)">has_seen_onboarding</text>
+    </g>
+  </g>
+
+  <!-- PATTERNS — left -->
+  <g transform="translate(80, 620)">
+    <rect width="370" height="330" rx="2" fill="none" stroke="#0A0A0A" stroke-width="2" />
+    <rect x="0" y="0" width="370" height="68" fill="#0A0A0A" />
+    <text class="table-head" x="28" y="46" fill="#f9f9f7">Patterns</text>
+    <text class="table-sub muted" x="28" y="100">Legacy + User Submitted</text>
+    <line x1="28" y1="115" x2="180" y2="115" class="rule" />
+    <g class="ink">
+      <text class="field-key" x="28" y="148">id · name · pattern_type</text>
+      <text class="field-val muted" x="28" y="175">description</text>
+      <text class="field-val muted" x="28" y="200">image · tutorial (SVG)</text>
+      <text class="field-val muted" x="28" y="225">tutorial_link</text>
+      <text class="field-val muted" x="28" y="250">approved</text>
+      <text class="field-val" x="28" y="282" fill="#0A0A0A">user_id <tspan class="field-val muted">→ Users.id</tspan></text>
+    </g>
+  </g>
+
+  <!-- LOCATIONS — far left top -->
+  <g transform="translate(80, 220)">
+    <rect width="370" height="290" rx="2" fill="#f9f9f7" stroke="#0A0A0A" stroke-width="2" />
+    <rect x="0" y="0" width="370" height="68" fill="#0A0A0A" />
+    <text class="table-head" x="28" y="46" fill="#f9f9f7">Locations</text>
+    <text class="table-sub muted" x="28" y="100">Where the pattern lives</text>
+    <line x1="28" y1="115" x2="180" y2="115" class="rule" />
+    <g class="ink">
+      <text class="field-key" x="28" y="148">id</text>
+      <text class="field-val" x="28" y="175">pattern_id <tspan class="field-val muted">→ Patterns.id</tspan></text>
+      <text class="field-val muted" x="28" y="200">name <tspan class="field-val muted">— monument</tspan></text>
+      <text class="field-val muted" x="28" y="225">city · country</text>
+    </g>
+  </g>
+
+  <!-- LIKES — far right top -->
+  <g transform="translate(1150, 220)">
+    <rect width="370" height="290" rx="2" fill="#f9f9f7" stroke="#0A0A0A" stroke-width="2" />
+    <rect x="0" y="0" width="370" height="68" fill="#0A0A0A" />
+    <text class="table-head" x="28" y="46" fill="#f9f9f7">Likes</text>
+    <text class="table-sub muted" x="28" y="100">Unique per user / pattern</text>
+    <line x1="28" y1="115" x2="180" y2="115" class="rule" />
+    <g class="ink">
+      <text class="field-key" x="28" y="148">id</text>
+      <text class="field-val" x="28" y="175">pattern_id <tspan class="field-val muted">→ Patterns.id</tspan></text>
+      <text class="field-val" x="28" y="200">user_id <tspan class="field-val muted">→ Users.id</tspan></text>
+    </g>
+  </g>
+
+  <!-- EDIT_REQUESTS — right -->
+  <g transform="translate(1150, 620)">
+    <rect width="370" height="330" rx="2" fill="none" stroke="#0A0A0A" stroke-width="2" />
+    <rect x="0" y="0" width="370" height="68" fill="#0A0A0A" />
+    <text class="table-head" x="28" y="46" fill="#f9f9f7">Edit_requests</text>
+    <text class="table-sub muted" x="28" y="100">Community moderation</text>
+    <line x1="28" y1="115" x2="180" y2="115" class="rule" />
+    <g class="ink">
+      <text class="field-key" x="28" y="148">id</text>
+      <text class="field-val" x="28" y="175">pattern_id <tspan class="field-val muted">→ Patterns.id</tspan></text>
+      <text class="field-val" x="28" y="200">user_id <tspan class="field-val muted">→ Users.id</tspan></text>
+      <text class="field-val muted" x="28" y="225">field · current_value</text>
+      <text class="field-val muted" x="28" y="250">new_value</text>
+      <text class="field-val muted" x="28" y="282">status · created_at · updated_at</text>
+    </g>
+  </g>
+
+  <!-- Connections -->
+  <!-- Locations → Patterns -->
+  <path d="M 265 510 L 265 620" class="conn" marker-end="url(#arrowhead)" />
+  <text class="fk-label muted" x="280" y="568">pattern_id</text>
+
+  <!-- Patterns → Users -->
+  <path d="M 450 720 Q 590 720 615 360" class="conn" marker-end="url(#arrowhead)" />
+  <text class="fk-label muted" x="500" y="700">user_id</text>
+
+  <!-- Edit_requests → Patterns -->
+  <path d="M 1150 785 L 450 785" class="conn" marker-end="url(#arrowhead)" />
+  <text class="fk-label muted" x="780" y="775">pattern_id</text>
+
+  <!-- Edit_requests → Users -->
+  <path d="M 1335 620 Q 1335 450 985 365" class="conn" marker-end="url(#arrowhead)" />
+  <text class="fk-label muted" x="1230" y="500">user_id</text>
+
+  <!-- Likes → Users -->
+  <path d="M 1335 510 Q 1335 430 985 380" class="conn" marker-end="url(#arrowhead)" />
+  <text class="fk-label muted" x="1145" y="440">user_id</text>
+
+  <!-- Footer note -->
+  <text class="subtitle muted" x="80" y="1030">Built on Fat-Free Framework · MySQL · PHP — PDO-prepared queries throughout</text>
+</svg>

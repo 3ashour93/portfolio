@@ -1,0 +1,182 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap');
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+}
+
+:root {
+  --ink: #0a0a0a;
+  --paper: #f9f9f7;
+  --accent: #00FF9C;
+  --rule: rgba(10, 10, 10, .1);
+  --muted: #888;
+  --f-ser: 'Cormorant Garamond', Georgia, serif;
+  --f-mon: 'Space Mono', monospace;
+  --pad-x: clamp(24px, 5vw, 80px);
+  --pad-y: clamp(64px, 9vw, 120px);
+  --ease: cubic-bezier(.16, 1, .3, 1);
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--f-mon);
+  font-size: 13px;
+  line-height: 1.6;
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* ── CURSOR ── */
+/* White fill + difference blend = always visible on any bg:
+   white on white bg → renders black  ✓
+   white on black bg → renders white  ✓
+   white on image    → inverted color ✓  */
+#cur {
+  position: fixed;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ffffff;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  transition: width .45s var(--ease), height .45s var(--ease), background .3s, border-radius .45s;
+  mix-blend-mode: difference;
+}
+#cur.grow { width: 52px; height: 52px; background: #ffffff; }
+@media (hover: none) { #cur { display: none; } body { cursor: auto; } }
+
+/* ── NAV ── */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 22px var(--pad-x);
+  border-bottom: 1px solid transparent;
+  transition: background .5s, border-color .5s;
+}
+nav.pinned {
+  background: rgba(249, 249, 247, .94);
+  backdrop-filter: blur(20px);
+  border-color: var(--rule);
+}
+.n-logo {
+  font-family: var(--f-ser);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--ink);
+  text-decoration: none;
+}
+.n-avail {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: .52rem;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.n-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: .4; }
+}
+.n-links { display: flex; gap: 20px; align-items: center; }
+.n-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted);
+  text-decoration: none;
+  transition: color .25s;
+  line-height: 1;
+  font-size: .85rem;
+}
+.n-icon:hover { color: var(--ink); }
+.n-link {
+  font-size: .52rem;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  text-decoration: none;
+  transition: color .25s;
+}
+.n-link:hover { color: var(--ink); }
+.n-cta {
+  font-size: .52rem;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  padding: 9px 20px;
+  border: 1px solid var(--ink);
+  color: var(--ink);
+  background: transparent;
+  text-decoration: none;
+  transition: background .3s, color .3s;
+}
+.n-cta:hover { background: var(--accent); color: var(--ink); border-color: var(--accent); }
+.n-back {
+  font-size: .56rem;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  transition: color .25s;
+}
+.n-back::before { content: '←'; font-size: .7rem; }
+.n-back:hover { color: var(--ink); }
+
+/* ── FOOTER ── */
+footer {
+  background: rgba(10, 10, 10, .95);
+  padding: 20px var(--pad-x);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.f-copy {
+  font-size: .46rem;
+  letter-spacing: .14em;
+  color: rgba(249, 249, 247, .2);
+}
+.f-links { display: flex; gap: 20px; }
+.f-links a {
+  font-size: .46rem;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: rgba(249, 249, 247, .2);
+  text-decoration: none;
+  transition: color .3s;
+}
+.f-links a:hover { color: var(--paper); }
+
+/* ── REVEAL ── */
+.r {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity .8s var(--ease), transform .8s var(--ease);
+}
+.r.in { opacity: 1; transform: none; }
+.r.d1 { transition-delay: .1s !important; }
+.r.d2 { transition-delay: .2s !important; }
+.r.d3 { transition-delay: .32s !important; }
