@@ -51,15 +51,20 @@ import { PROFILE, PROJECTS, CLIENTS, CATEGORIES } from '../data/projects';
         const cats = (p.categories && p.categories.length ? p.categories : [p.category]).join('||');
         return (
           <a class="proj-item" href={`/projects/${p.id}`} data-hero={p.heroImage} data-cats={cats}>
-            <div class="pi-num">{p.num}</div>
-            <div class="pi-content">
-              <div class="pi-cat">{p.category}</div>
-              <div class="pi-title">{p.title}</div>
-              <div class="pi-meta">{p.client}</div>
-              {p.badge && <div class="pi-badge">{p.badge}</div>}
+            <svg class="pi-border" preserveAspectRatio="none" aria-hidden="true">
+              <rect class="pi-border-rect" x="0" y="0" width="100%" height="100%" fill="none" />
+            </svg>
+            <div class="pi-inner">
+              <div class="pi-num">{p.num}</div>
+              <div class="pi-content">
+                <div class="pi-cat">{p.category}</div>
+                <div class="pi-title">{p.title}</div>
+                <div class="pi-meta">{p.client}</div>
+                {p.badge && <div class="pi-badge">{p.badge}</div>}
+              </div>
+              <div class="pi-year">{p.year}</div>
+              <div class="pi-arr">→</div>
             </div>
-            <div class="pi-year">{p.year}</div>
-            <div class="pi-arr">→</div>
           </a>
         );
       })}
@@ -133,7 +138,10 @@ import { PROFILE, PROJECTS, CLIENTS, CATEGORIES } from '../data/projects';
         </div>
         <div class="ab-fact">
           <span class="ab-fact-k">Availability</span>
-          <span class="ab-fact-v av">{PROFILE.available ? 'Open to projects' : 'Not available'}</span>
+          <span class="ab-fact-v av">
+            <span class="av-dot" aria-hidden="true"></span>
+            <span class="av-text">{PROFILE.available ? 'Open to projects' : 'Not available'}</span>
+          </span>
         </div>
       </div>
     </div>
@@ -390,19 +398,64 @@ import { PROFILE, PROJECTS, CLIENTS, CATEGORIES } from '../data/projects';
 }
 .proj-item {
   background: var(--paper);
-  padding: clamp(20px, 2.5vw, 32px);
   text-decoration: none;
   color: var(--ink);
   position: relative;
   overflow: visible;
   cursor: none;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
   min-height: 220px;
   transition: background .4s var(--ease);
 }
+.pi-inner {
+  padding: clamp(20px, 2.5vw, 32px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  min-height: inherit;
+  position: relative;
+  z-index: 1;
+}
 .proj-item.is-hidden { display: none; }
+
+/* Border-tracing feedback — SVG with stroke-dashoffset
+   draws a single continuous stroke clockwise around the card's
+   true rectangular perimeter, then fades. */
+.pi-border {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 4;
+  opacity: 0;
+  overflow: visible;
+}
+.pi-border-rect {
+  stroke: var(--accent);
+  stroke-width: 2;
+  fill: none;
+  /* stroke-dasharray + stroke-dashoffset get set inline via JS once we
+     measure the card's real perimeter — that way the dash math is exact. */
+}
+.proj-item.is-tracing .pi-border {
+  opacity: 1;
+  animation: pi-fade 1.6s ease-out forwards;
+  animation-delay: var(--trace-delay, 0ms);
+}
+.proj-item.is-tracing .pi-border-rect {
+  animation: pi-draw 950ms cubic-bezier(.55, .05, .25, 1) forwards;
+  animation-delay: var(--trace-delay, 0ms);
+}
+@keyframes pi-draw {
+  to { stroke-dashoffset: 0; }
+}
+@keyframes pi-fade {
+  0%   { opacity: 1; }
+  68%  { opacity: 1; }
+  100% { opacity: 0; }
+}
+
 .proj-item::before {
   content: '';
   position: absolute; inset: 0;
@@ -413,7 +466,7 @@ import { PROFILE, PROJECTS, CLIENTS, CATEGORIES } from '../data/projects';
   z-index: 0;
 }
 .proj-item:hover::before { transform: scaleX(1); }
-.proj-item > *:not(.pi-arr) { position: relative; z-index: 1; transition: color .3s; }
+.proj-item > *:not(.pi-arr):not(.pi-border) { position: relative; z-index: 1; transition: color .3s; }
 .pi-arr { position: absolute; z-index: 2; }
 
 .pi-num {
@@ -572,7 +625,24 @@ import { PROFILE, PROJECTS, CLIENTS, CATEGORIES } from '../data/projects';
 .ab-fact { display: flex; justify-content: space-between; align-items: baseline; padding: 16px 0; border-bottom: 1px solid rgba(249,249,247,.06); gap: 16px; }
 .ab-fact-k { font-size: .5rem; letter-spacing: .2em; text-transform: uppercase; color: rgba(249,249,247,.25); flex-shrink: 0; }
 .ab-fact-v { font-family: var(--f-ser); font-size: .92rem; font-weight: 600; color: var(--paper); text-align: right; line-height: 1.3; }
-.ab-fact-v.av { font-weight: 300; font-style: italic; color: rgba(249,249,247,.5); }
+.ab-fact-v.av { font-weight: 300; font-style: italic; color: rgba(249,249,247,.5); display: inline-flex; align-items: center; gap: 8px; }
+.av-dot {
+  display: inline-block;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 0 rgba(0,255,156,.5);
+  animation: av-pulse 2.4s ease-out infinite;
+  flex-shrink: 0;
+}
+@keyframes av-pulse {
+  0%   { box-shadow: 0 0 0 0 rgba(0,255,156,.55); }
+  70%  { box-shadow: 0 0 0 8px rgba(0,255,156,0); }
+  100% { box-shadow: 0 0 0 0 rgba(0,255,156,0); }
+}
+@media (max-width: 768px) {
+  .ab-fact-v.av .av-text { display: none !important; }
+}
 @media (max-width: 768px) { .about-grid { grid-template-columns: 1fr; } .ab-right { padding-top: 40px; } }
 
 /* ── CLIENTS ── */
@@ -659,6 +729,73 @@ if (preview) {
 // Category filter
 const catPills = document.querySelectorAll('.cat-pill');
 const projItems = document.querySelectorAll('.proj-item');
+
+// Measure each card and set its stroke-dasharray / stroke-dashoffset to
+// its actual perimeter so the SVG draws a single clean clockwise pass.
+function setupBorderPaths() {
+  projItems.forEach((item) => {
+    const r = item.getBoundingClientRect();
+    if (r.width === 0 || r.height === 0) return;
+    const perimeter = 2 * (r.width + r.height);
+    const rectEl = item.querySelector('.pi-border-rect');
+    if (rectEl) {
+      rectEl.style.strokeDasharray = perimeter + 'px';
+      rectEl.style.strokeDashoffset = perimeter + 'px';
+    }
+  });
+}
+
+// Trigger the border-tracing animation on every currently-visible item,
+// staggered row-by-row, left-to-right within each row.
+function traceVisibleItems() {
+  setupBorderPaths();          // refresh dimensions in case anything reflowed
+  // Clear any in-flight animation first
+  projItems.forEach((item) => item.classList.remove('is-tracing'));
+  // Force reflow so the next class addition restarts the keyframes
+  void document.body.offsetWidth;
+
+  const COL_STAGGER = 120;   // ms between cards in the same row
+  const ROW_STAGGER = 380;   // ms between rows
+
+  // Collect visible items with their grid position, group into rows
+  const visible = Array.from(projItems)
+    .filter((item) => !item.classList.contains('is-hidden'))
+    .map((item) => {
+      const r = item.getBoundingClientRect();
+      return { item, top: Math.round(r.top), left: Math.round(r.left) };
+    })
+    .sort((a, b) => {
+      // Items more than 5px apart in Y are in different rows
+      if (Math.abs(a.top - b.top) > 5) return a.top - b.top;
+      return a.left - b.left;
+    });
+
+  let currentRowTop = -Infinity;
+  let rowIdx = -1;
+  let colIdx = 0;
+
+  visible.forEach(({ item, top }) => {
+    if (Math.abs(top - currentRowTop) > 5) {
+      rowIdx++;
+      colIdx = 0;
+      currentRowTop = top;
+    } else {
+      colIdx++;
+    }
+    const delay = rowIdx * ROW_STAGGER + colIdx * COL_STAGGER;
+    item.style.setProperty('--trace-delay', delay + 'ms');
+    item.classList.add('is-tracing');
+    setTimeout(() => item.classList.remove('is-tracing'), 1700 + delay);
+  });
+}
+
+// Recompute on window resize (debounced) — cards can reflow with the grid
+let __resizeTimer = null;
+window.addEventListener('resize', () => {
+  clearTimeout(__resizeTimer);
+  __resizeTimer = setTimeout(setupBorderPaths, 200);
+});
+
 catPills.forEach((pill) => {
   pill.addEventListener('click', () => {
     const cat = pill.getAttribute('data-cat');
@@ -673,6 +810,18 @@ catPills.forEach((pill) => {
       if (cats.includes(cat)) item.classList.remove('is-hidden');
       else item.classList.add('is-hidden');
     });
+    traceVisibleItems();
   });
 });
+
+// Run on initial load, after a short delay so layout settles first.
+// Handle both "page still loading" and "already loaded (e.g. HMR)" cases.
+function startInitialTrace() {
+  setTimeout(traceVisibleItems, 200);
+}
+if (document.readyState === 'complete' || document.readyState === 'interactive') {
+  startInitialTrace();
+} else {
+  window.addEventListener('DOMContentLoaded', startInitialTrace);
+}
 </script>

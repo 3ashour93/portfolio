@@ -622,7 +622,6 @@ export const PROJECTS: Project[] = [
     imageLayout: 'stack',
     images: [
       '/images/projects/soul-broth/img-1.jpg',
-      '/images/projects/soul-broth/brand-guide.jpg',
     ],
     link: 'https://www.instagram.com/soulbroth.qa',
     linkLabel: 'View on Instagram',

@@ -97,6 +97,9 @@ nav.pinned {
   0%, 100% { opacity: 1; }
   50% { opacity: .4; }
 }
+@media (max-width: 768px) {
+  .n-avail-text { display: none !important; }
+}
 .n-links { display: flex; gap: 20px; align-items: center; }
 .n-icon {
   display: flex;

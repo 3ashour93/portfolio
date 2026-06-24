@@ -21,7 +21,7 @@ const { showBack = false, profile } = Astro.props;
   ) : (
     <div class="n-avail">
       {profile.available && <span class="n-dot"></span>}
-      {profile.available ? 'Available for work' : 'Not available'}
+      <span class="n-avail-text">{profile.available ? 'Available for work' : 'Not available'}</span>
     </div>
   )}
 
