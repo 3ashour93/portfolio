@@ -34,7 +34,6 @@ import { PROFILE, PROJECTS, CLIENTS, CATEGORIES } from '../data/projects';
   <div class="sec-head r">
     <div>
       <div class="sec-label">Selected Work</div>
-      <h2 class="sec-title">{PROJECTS.length} projects.<br><em>2017 — 2026.</em></h2>
     </div>
     <span class="sec-meta">Brand · Identity · Digital</span>
   </div>
@@ -405,6 +404,17 @@ import { PROFILE, PROJECTS, CLIENTS, CATEGORIES } from '../data/projects';
   cursor: none;
   min-height: 220px;
   transition: background .4s var(--ease);
+  /* Default hidden state — JS adds .is-revealed to fade them in */
+  opacity: 0;
+  transform: translateY(18px);
+}
+.proj-item.is-revealed {
+  animation: pi-reveal 600ms cubic-bezier(.25, .65, .35, 1) forwards;
+  animation-delay: var(--reveal-delay, 0ms);
+}
+@keyframes pi-reveal {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 .pi-inner {
   padding: clamp(20px, 2.5vw, 32px);
@@ -433,10 +443,20 @@ import { PROFILE, PROJECTS, CLIENTS, CATEGORIES } from '../data/projects';
 }
 .pi-border-rect {
   stroke: var(--accent);
-  stroke-width: 2;
+  stroke-width: 1;
   fill: none;
   /* stroke-dasharray + stroke-dashoffset get set inline via JS once we
      measure the card's real perimeter — that way the dash math is exact. */
+}
+
+/* Click feedback — quick flash + scale on press */
+.proj-item.is-pressed {
+  animation: pi-press 280ms ease-out forwards;
+}
+@keyframes pi-press {
+  0%   { transform: scale(1); opacity: 1; }
+  50%  { transform: scale(0.985); opacity: 0.85; }
+  100% { transform: scale(1); opacity: 1; }
 }
 .proj-item.is-tracing .pi-border {
   opacity: 1;
@@ -730,6 +750,27 @@ if (preview) {
 const catPills = document.querySelectorAll('.cat-pill');
 const projItems = document.querySelectorAll('.proj-item');
 
+// Click feedback — flash + scale + brief border pulse before navigating away
+projItems.forEach((item) => {
+  item.addEventListener('click', (e) => {
+    // Delay the navigation slightly so the user sees the feedback
+    if (item.classList.contains('is-pressed')) return;
+    const href = item.getAttribute('href');
+    if (!href) return;
+    // Let the user see the press animation; ~200ms is enough
+    if (!e.metaKey && !e.ctrlKey && !e.shiftKey && e.button === 0) {
+      e.preventDefault();
+      item.classList.add('is-pressed');
+      // Re-pulse the border briefly for extra confirmation
+      item.style.setProperty('--trace-delay', '0ms');
+      item.classList.remove('is-tracing');
+      void item.offsetWidth;
+      item.classList.add('is-tracing');
+      setTimeout(() => { window.location.href = href; }, 230);
+    }
+  });
+});
+
 // Measure each card and set its stroke-dasharray / stroke-dashoffset to
 // its actual perimeter so the SVG draws a single clean clockwise pass.
 function setupBorderPaths() {
@@ -745,17 +786,20 @@ function setupBorderPaths() {
   });
 }
 
-// Trigger the border-tracing animation on every currently-visible item,
-// staggered row-by-row, left-to-right within each row.
-function traceVisibleItems() {
+// Trigger the reveal + border-tracing animation on every currently-visible
+// item, staggered row-by-row, left-to-right within each row.
+function revealAndTraceVisibleItems() {
   setupBorderPaths();          // refresh dimensions in case anything reflowed
-  // Clear any in-flight animation first
-  projItems.forEach((item) => item.classList.remove('is-tracing'));
-  // Force reflow so the next class addition restarts the keyframes
+  // Clear any in-flight state first so animations restart cleanly
+  projItems.forEach((item) => {
+    item.classList.remove('is-tracing');
+    item.classList.remove('is-revealed');
+  });
+  // Force reflow so the next class addition restarts the keyframes/transitions
   void document.body.offsetWidth;
 
-  const COL_STAGGER = 120;   // ms between cards in the same row
-  const ROW_STAGGER = 380;   // ms between rows
+  const COL_STAGGER = 90;    // ms between cards in the same row (reveal pace)
+  const ROW_STAGGER = 220;   // ms between rows
 
   // Collect visible items with their grid position, group into rows
   const visible = Array.from(projItems)
@@ -765,7 +809,6 @@ function traceVisibleItems() {
       return { item, top: Math.round(r.top), left: Math.round(r.left) };
     })
     .sort((a, b) => {
-      // Items more than 5px apart in Y are in different rows
       if (Math.abs(a.top - b.top) > 5) return a.top - b.top;
       return a.left - b.left;
     });
@@ -783,11 +826,16 @@ function traceVisibleItems() {
       colIdx++;
     }
     const delay = rowIdx * ROW_STAGGER + colIdx * COL_STAGGER;
+    item.style.setProperty('--reveal-delay', delay + 'ms');
     item.style.setProperty('--trace-delay', delay + 'ms');
+    item.classList.add('is-revealed');
     item.classList.add('is-tracing');
     setTimeout(() => item.classList.remove('is-tracing'), 1700 + delay);
   });
 }
+
+// Keep the old name as an alias so other call sites still work
+const traceVisibleItems = revealAndTraceVisibleItems;
 
 // Recompute on window resize (debounced) — cards can reflow with the grid
 let __resizeTimer = null;
@@ -814,14 +862,28 @@ catPills.forEach((pill) => {
   });
 });
 
-// Run on initial load, after a short delay so layout settles first.
-// Handle both "page still loading" and "already loaded (e.g. HMR)" cases.
-function startInitialTrace() {
-  setTimeout(traceVisibleItems, 200);
+// Trigger reveal+trace only when the work grid scrolls into view (once).
+// If the grid is already in view at page load, this fires immediately.
+function setupWorkSectionObserver() {
+  const grid = document.getElementById('proj-grid');
+  if (!grid) return;
+  let hasFired = false;
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting && !hasFired) {
+        hasFired = true;
+        setupBorderPaths();
+        setTimeout(traceVisibleItems, 80);
+        obs.disconnect();
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -10% 0px' });
+  obs.observe(grid);
 }
+
 if (document.readyState === 'complete' || document.readyState === 'interactive') {
-  startInitialTrace();
+  setupWorkSectionObserver();
 } else {
-  window.addEventListener('DOMContentLoaded', startInitialTrace);
+  window.addEventListener('DOMContentLoaded', setupWorkSectionObserver);
 }
 </script>
