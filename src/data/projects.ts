@@ -91,7 +91,7 @@ export const CLIENTS = [
   { name: 'Asian Football Confederation', type: 'Sports & Events', url: 'https://www.the-afc.com' },
   { name: 'Design Doha Biennial', type: 'Design & Culture', url: '' },
   { name: 'Education Above All', type: 'Non-Profit', url: 'https://educationaboveall.org' },
-  { name: 'BeIN Sports × TOD', type: 'Media & Broadcast', url: '' },
+  { name: 'beIN SPORTS × TOD', type: 'Media & Broadcast', url: '' },
   { name: 'SkipCash', type: 'Fintech', url: '' },
   { name: 'US Embassy — Doha', type: 'Diplomatic', url: '' },
   { name: 'Aspire Zone Foundation', type: 'Sports & Wellness', url: '' },
@@ -967,12 +967,12 @@ export const PROJECTS: Project[] = [
     category: 'Motion / Animation',
     categories: ['Motion / Animation'],
     year: '2022',
-    role: 'Director / Editor',
+    role: 'Teaser Editor',
     tools: ['Premiere Pro', 'After Effects', 'DaVinci Resolve'],
     tags: ['Video Editing', 'Motion Design', 'Concept Development'],
     teaser: "Teaser edit for an independent short film exploring resilience through a single night.",
     overview:
-      "Directed and edited the teaser for 'Hope', an independent short film. The teaser distils the film's mood and central question into a 60-second cut designed for festival pitches and social.",
+      "Created the teaser for 'Hope', an independent short film I was brought on to as the teaser editor. The teaser distils the film's mood and central question into a 60-second cut designed for festival pitches and social — separate from the feature itself.",
     brief:
       "Produce a teaser that communicates tone, scale, and stakes — without revealing the story — for use in festival submissions, pitch decks, and social previews.",
     approach:

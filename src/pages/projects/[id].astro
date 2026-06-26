@@ -34,6 +34,28 @@ const nextProject = PROJECTS[currentIndex < PROJECTS.length - 1 ? currentIndex +
   <div class="ph-cat">{p.category}</div>
   <h1 class="ph-title" set:html={p.title.replace(/(\S+)\s*$/, '<em>$1</em>')}></h1>
   {p.badge && <div class="ph-badge">{p.badge}</div>}
+
+  <!-- Overview + Services within the hero so visitors get context immediately -->
+  <div class="ph-overview">
+    <p class="ph-overview-text">{p.overview}</p>
+    <div class="ph-overview-side">
+      {p.websiteUrl && (
+        <a class="ph-visit" href={p.websiteUrl} target="_blank" rel="noopener">
+          <span>{p.websiteLabel || 'Visit Website'}</span>
+          <span class="ph-visit-arr">↗</span>
+        </a>
+      )}
+      {p.tags && p.tags.length > 0 && (
+        <div class="ph-services">
+          <div class="ph-services-label">Services</div>
+          <div class="ph-services-pills">
+            {p.tags.map((t) => <span class="ph-pt-tag">{t}</span>)}
+          </div>
+        </div>
+      )}
+    </div>
+  </div>
+
   <div class="ph-meta">
     <div class="pm"><div class="pm-k">Client</div><div class="pm-v">{p.client}</div></div>
     <div class="pm"><div class="pm-k">Role</div><div class="pm-v">{p.role}</div></div>
@@ -147,31 +169,6 @@ const nextProject = PROJECTS[currentIndex < PROJECTS.length - 1 ? currentIndex +
     );
   })}
 
-  <!-- THEN CONTEXT — Overview + Services -->
-  <div class="ov r">
-    <div>
-      <div class="ov-label">Overview</div>
-      <h2 class="ov-heading">{p.title}</h2>
-      {p.websiteUrl && (
-        <a class="ov-visit" href={p.websiteUrl} target="_blank" rel="noopener">
-          <span>{p.websiteLabel || 'Visit Website'}</span>
-          <span class="ov-visit-arr">↗</span>
-        </a>
-      )}
-    </div>
-    <div class="ov-text">
-      <p>{p.overview}</p>
-      {p.tags && p.tags.length > 0 && (
-        <div class="ov-services">
-          <div class="ov-services-label">Services</div>
-          <div class="ov-services-pills">
-            {p.tags.map((t) => <span class="ov-pt-tag">{t}</span>)}
-          </div>
-        </div>
-      )}
-    </div>
-  </div>
-
   <!-- Brief · Approach two columns (Outcome lives in the green block below) -->
   <div class="sections sections-2col">
     <div class="s-col r">
@@ -210,8 +207,11 @@ const nextProject = PROJECTS[currentIndex < PROJECTS.length - 1 ? currentIndex +
   <!-- Prev / All / Next row -->
   <div class="pfn-row">
     <a href={`/projects/${prevProject.id}`} class="pfn-prev">
-      <span class="pfn-label">← Previous</span>
-      <span class="pfn-title">{prevProject.title}</span>
+      <span class="pfn-arrow" aria-hidden="true">←</span>
+      <div class="pfn-text">
+        <span class="pfn-label">Previous</span>
+        <span class="pfn-title">{prevProject.title}</span>
+      </div>
     </a>
 
     <a href="/" class="pfn-all">
@@ -220,8 +220,11 @@ const nextProject = PROJECTS[currentIndex < PROJECTS.length - 1 ? currentIndex +
     </a>
 
     <a href={`/projects/${nextProject.id}`} class="pfn-next">
-      <span class="pfn-label">Next →</span>
-      <span class="pfn-title">{nextProject.title}</span>
+      <div class="pfn-text">
+        <span class="pfn-label">Next</span>
+        <span class="pfn-title">{nextProject.title}</span>
+      </div>
+      <span class="pfn-arrow" aria-hidden="true">→</span>
     </a>
   </div>
 
@@ -279,21 +282,58 @@ const nextProject = PROJECTS[currentIndex < PROJECTS.length - 1 ? currentIndex +
   border: 1px solid rgba(249,249,247,.15);
   animation: up .8s var(--ease) .4s both;
 }
-/* Visit Website CTA — sits inside the Overview left column, under the heading */
-.ov-visit {
+/* Overview + Services inside the hero (dark bg, paper text) */
+.ph-overview {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: clamp(32px, 5vw, 72px);
+  margin-top: clamp(36px, 5vw, 56px);
+  align-items: start;
+  animation: up .9s var(--ease) .45s both;
+}
+.ph-overview-text {
+  font-size: clamp(.85rem, 1vw, .95rem);
+  line-height: 1.85;
+  color: rgba(249,249,247,.65);
+  max-width: 64ch;
+  margin: 0;
+}
+.ph-overview-side {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(20px, 2.5vw, 28px);
+}
+.ph-visit {
   display: inline-flex; align-items: center; gap: 10px;
-  margin-top: clamp(20px, 2.5vw, 32px);
   font-size: .58rem; letter-spacing: .2em; text-transform: uppercase;
   text-decoration: none;
-  color: var(--ink);
-  border: 1px solid var(--ink);
+  color: var(--paper);
+  border: 1px solid rgba(249,249,247,.6);
   padding: 14px 26px;
   transition: background .35s var(--ease), color .35s var(--ease), border-color .35s var(--ease);
   width: fit-content;
 }
-.ov-visit-arr { font-size: .85rem; transition: transform .35s var(--ease); display: inline-block; }
-.ov-visit:hover { background: var(--accent); color: var(--ink); border-color: var(--accent); }
-.ov-visit:hover .ov-visit-arr { transform: translate(3px, -3px); }
+.ph-visit-arr { font-size: .85rem; transition: transform .35s var(--ease); display: inline-block; }
+.ph-visit:hover { background: var(--accent); color: var(--ink); border-color: var(--accent); }
+.ph-visit:hover .ph-visit-arr { transform: translate(3px, -3px); }
+.ph-services-label {
+  font-size: .5rem; letter-spacing: .26em; text-transform: uppercase;
+  color: rgba(249,249,247,.45); margin-bottom: 10px;
+}
+.ph-services-pills { display: flex; flex-wrap: wrap; gap: 6px; }
+.ph-pt-tag {
+  display: inline-block;
+  font-size: .58rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  padding: 8px 14px;
+  border: 1px solid rgba(249,249,247,.18);
+  color: rgba(249,249,247,.85);
+  background: transparent;
+}
+@media (max-width: 768px) {
+  .ph-overview { grid-template-columns: 1fr; gap: 28px; }
+}
 .ph-meta {
   display: grid; grid-template-columns: repeat(4, 1fr);
   gap: 2px;
@@ -518,27 +558,49 @@ const nextProject = PROJECTS[currentIndex < PROJECTS.length - 1 ? currentIndex +
   position: relative;
   overflow: hidden;
 }
+/* Prev / Next become flex rows so the big arrow sits next to the text */
+.pfn-prev, .pfn-next {
+  flex-direction: row;
+  align-items: center;
+  gap: clamp(16px, 2.5vw, 32px);
+}
+.pfn-text { display: flex; flex-direction: column; gap: 8px; }
+.pfn-prev .pfn-text { align-items: flex-start; }
+.pfn-next .pfn-text { align-items: flex-end; text-align: right; }
+.pfn-arrow {
+  font-family: var(--f-ser);
+  font-size: clamp(2.4rem, 5vw, 4rem);
+  font-weight: 300;
+  color: var(--ink);
+  line-height: 1;
+  display: inline-block;
+  transition: color .3s var(--ease), transform .35s var(--ease);
+  animation: pfn-arrow-pulse 2.4s ease-in-out infinite;
+}
+.pfn-next .pfn-arrow { animation-delay: 1.2s; }
+.pfn-prev .pfn-arrow { --arrow-shift: -8px; }
+.pfn-next .pfn-arrow { --arrow-shift: 8px; }
+@keyframes pfn-arrow-pulse {
+  0%, 100% { transform: translateX(0); opacity: .85; }
+  50%      { transform: translateX(var(--arrow-shift, 0)); opacity: 1; }
+}
+.pfn-prev:hover .pfn-arrow,
+.pfn-next:hover .pfn-arrow { color: var(--accent); animation-play-state: paused; opacity: 1; }
+.pfn-prev:hover .pfn-arrow { transform: translateX(-12px); }
+.pfn-next:hover .pfn-arrow { transform: translateX(12px); }
+
 .pfn-prev:hover, .pfn-next:hover { background: rgba(10,10,10,.04); }
 
-/* Subtle ongoing pulse on the Prev / Next labels so visitors notice they can navigate */
+/* Label sits above the project name — the big arrow handles the visual pulse now */
 .pfn-label {
   font-size: .52rem;
   letter-spacing: .22em;
   text-transform: uppercase;
   color: rgba(10,10,10,.55);
   transition: color .3s;
-  animation: pfn-pulse 2.6s ease-in-out infinite;
 }
-.pfn-next .pfn-label { animation-delay: 1.3s; }
-@keyframes pfn-pulse {
-  0%, 100% { opacity: .55; transform: translateX(0); }
-  50%      { opacity: 1;   transform: translateX(var(--pulse-x, 0)); }
-}
-.pfn-prev .pfn-label { --pulse-x: -4px; }
-.pfn-next .pfn-label { --pulse-x: 4px; }
-
 .pfn-prev:hover .pfn-label,
-.pfn-next:hover .pfn-label { color: var(--ink); animation-play-state: paused; opacity: 1; }
+.pfn-next:hover .pfn-label { color: var(--accent); }
 
 .pfn-title {
   font-family: var(--f-ser);
