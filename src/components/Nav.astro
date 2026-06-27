@@ -17,7 +17,7 @@ const { showBack = false, profile } = Astro.props;
 
 <nav id="nav">
   {showBack ? (
-    <a class="n-back" href="/">All Projects</a>
+    <a class="n-back magnetic-el" href="/">All Projects</a>
   ) : (
     <div class="n-avail">
       {profile.available && <span class="n-dot"></span>}
@@ -25,23 +25,23 @@ const { showBack = false, profile } = Astro.props;
     </div>
   )}
 
-  <a class="n-logo" href="/">{profile.name}</a>
+  <a class="n-logo magnetic-el" href="/">{profile.name}</a>
 
   <div class="n-links">
     {!showBack && (
       <>
-        <a class="n-icon" href={profile.links.linkedin} target="_blank" rel="noopener" aria-label="LinkedIn">
+        <a class="n-icon magnetic-el" href={profile.links.linkedin} target="_blank" rel="noopener" aria-label="LinkedIn">
           <i class="fa-brands fa-linkedin-in"></i>
         </a>
-        <a class="n-icon" href={profile.links.behance} target="_blank" rel="noopener" aria-label="Behance">
+        <a class="n-icon magnetic-el" href={profile.links.behance} target="_blank" rel="noopener" aria-label="Behance">
           <i class="fa-brands fa-behance"></i>
         </a>
-        <a class="n-icon" href={profile.links.vimeo} target="_blank" rel="noopener" aria-label="Vimeo">
+        <a class="n-icon magnetic-el" href={profile.links.vimeo} target="_blank" rel="noopener" aria-label="Vimeo">
           <i class="fa-brands fa-vimeo-v"></i>
         </a>
       </>
     )}
-    <a class="n-cta" href={`mailto:${profile.email}`}>Let's Talk</a>
+    <a class="n-cta magnetic-el" href={`mailto:${profile.email}`}>Let's Talk</a>
   </div>
 </nav>
 

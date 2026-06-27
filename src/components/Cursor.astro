@@ -4,15 +4,37 @@
 <div id="cur"></div>
 
 <script>
+  // 1. Original Cursor Logic
   const cur = document.getElementById('cur');
   if (cur) {
     document.addEventListener('mousemove', (e) => {
       cur.style.left = e.clientX + 'px';
       cur.style.top = e.clientY + 'px';
     });
-    document.querySelectorAll('a, button').forEach((el) => {
+    
+    // Attach grow effect to standard elements + new magnetic elements
+    document.querySelectorAll('a, button, .magnetic-el, .pfn-prev, .pfn-next').forEach((el) => {
       el.addEventListener('mouseenter', () => cur.classList.add('grow'));
       el.addEventListener('mouseleave', () => cur.classList.remove('grow'));
     });
   }
+
+  // 2. New Magnetic Elements Logic
+  document.querySelectorAll('.magnetic-el').forEach(el => {
+    el.addEventListener('mousemove', (e) => {
+      const rect = el.getBoundingClientRect();
+      const x = e.clientX - rect.left - rect.width / 2;
+      const y = e.clientY - rect.top - rect.height / 2;
+      
+      const scale = el.classList.contains('cat-pill') ? 'scale(1.12)' 
+                  : el.classList.contains('pfn-all') ? 'scale(1.02)' 
+                  : 'scale(1.05)';
+      
+      el.style.transform = `translate(${x * 0.25}px, ${y * 0.25}px) ${scale}`;
+    });
+
+    el.addEventListener('mouseleave', () => {
+      el.style.transform = ''; 
+    });
+  });
 </script>

@@ -703,6 +703,17 @@ const obs = new IntersectionObserver(
   { threshold: 0.08 }
 );
 document.querySelectorAll('.r').forEach((el) => obs.observe(el));
+// Hero Mouse Parallax
+const parallaxTarget = document.getElementById('hero-name') || document.getElementById('proj-title');
+if (parallaxTarget) {
+  window.addEventListener('mousemove', (e) => {
+    if (window.innerWidth > 640) {
+      const x = (e.clientX / window.innerWidth - 0.5) * 30; 
+      const y = (e.clientY / window.innerHeight - 0.5) * 30; 
+      parallaxTarget.style.transform = `translate(${-x}px, ${-y}px)`;
+    }
+  });
+}
 </script>
 
 <script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/masonry/4.2.2/masonry.pkgd.min.js"></script>
@@ -723,4 +734,5 @@ document.querySelectorAll('.r').forEach((el) => obs.observe(el));
       });
     });
   })();
+  
 </script>
