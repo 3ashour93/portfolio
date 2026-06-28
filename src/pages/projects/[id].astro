@@ -205,28 +205,30 @@ const nextProject = PROJECTS[currentIndex < PROJECTS.length - 1 ? currentIndex +
 <div id="proj-footer-nav">
 
   <!-- Prev / All / Next row -->
-  <div class="pfn-row">
-    <a href={`/projects/${prevProject.id}`} class="pfn-prev">
-      <span class="pfn-arrow" aria-hidden="true">←</span>
-      <div class="pfn-text">
-        <span class="pfn-label">Previous</span>
-        <span class="pfn-title">{prevProject.title}</span>
-      </div>
-    </a>
+<div class="pfn-row">
+  <a href={`/projects/${prevProject.id}`} class="pfn-prev magnetic-el">
+    <!-- Updated arrow here -->
+    <span class="pfn-arrow" aria-hidden="true">&#8249;</span>
+    <div class="pfn-text">
+      <span class="pfn-label">Previous</span>
+      <span class="pfn-title">{prevProject.title}</span>
+    </div>
+  </a>
 
-    <a href="/" class="pfn-all">
-      <span class="pfn-all-label">All Work</span>
-      <span class="pfn-all-count">{PROJECTS.length} projects</span>
-    </a>
+  <a href="/" class="pfn-all magnetic-el">
+    <span class="pfn-all-label">All Work</span>
+    <span class="pfn-all-count">{PROJECTS.length} projects</span>
+  </a>
 
-    <a href={`/projects/${nextProject.id}`} class="pfn-next">
-      <div class="pfn-text">
-        <span class="pfn-label">Next</span>
-        <span class="pfn-title">{nextProject.title}</span>
-      </div>
-      <span class="pfn-arrow" aria-hidden="true">→</span>
-    </a>
-  </div>
+  <a href={`/projects/${nextProject.id}`} class="pfn-next magnetic-el">
+    <div class="pfn-text">
+      <span class="pfn-label">Next</span>
+      <span class="pfn-title">{nextProject.title}</span>
+    </div>
+    <!-- Updated arrow here -->
+    <span class="pfn-arrow" aria-hidden="true">&#8250;</span>
+  </a>
+</div>
 
   <!-- All projects list -->
   <div class="pfn-list">
