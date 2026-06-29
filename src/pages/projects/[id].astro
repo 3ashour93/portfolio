@@ -586,8 +586,15 @@ const nextProject = PROJECTS[currentIndex < PROJECTS.length - 1 ? currentIndex +
   0%, 100% { transform: translateX(0); opacity: .85; }
   50%      { transform: translateX(var(--arrow-shift, 0)); opacity: 1; }
 }
+/* On hover: arrows + text turn bold/heavier instead of green
+   (green-on-gray was hard to read) */
 .pfn-prev:hover .pfn-arrow,
-.pfn-next:hover .pfn-arrow { color: var(--accent); animation-play-state: paused; opacity: 1; }
+.pfn-next:hover .pfn-arrow {
+  animation-play-state: paused;
+  opacity: 1;
+  font-weight: 700;
+  color: var(--ink);
+}
 .pfn-prev:hover .pfn-arrow { transform: translateX(-12px); }
 .pfn-next:hover .pfn-arrow { transform: translateX(12px); }
 
@@ -599,10 +606,10 @@ const nextProject = PROJECTS[currentIndex < PROJECTS.length - 1 ? currentIndex +
   letter-spacing: .22em;
   text-transform: uppercase;
   color: rgba(10,10,10,.55);
-  transition: color .3s;
+  transition: color .3s, font-weight .25s;
 }
 .pfn-prev:hover .pfn-label,
-.pfn-next:hover .pfn-label { color: var(--accent); }
+.pfn-next:hover .pfn-label { color: var(--ink); font-weight: 600; }
 
 .pfn-title {
   font-family: var(--f-ser);
@@ -612,10 +619,10 @@ const nextProject = PROJECTS[currentIndex < PROJECTS.length - 1 ? currentIndex +
   color: var(--ink);
   letter-spacing: -.02em;
   line-height: 1.05;
-  transition: color .3s;
+  transition: color .3s, font-weight .25s;
 }
 .pfn-prev:hover .pfn-title,
-.pfn-next:hover .pfn-title { color: var(--ink); }
+.pfn-next:hover .pfn-title { color: var(--ink); font-weight: 600; }
 
 .pfn-prev { align-items: flex-start; }
 .pfn-next { align-items: flex-end; text-align: right; }

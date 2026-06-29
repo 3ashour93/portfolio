@@ -979,10 +979,11 @@ export const PROJECTS: Project[] = [
       "Built the edit around rhythm and withheld information — a handful of carefully chosen visual beats, a restrained sound design, and an ending that asks the viewer to lean in rather than tying off.",
     outcome:
       "Delivered a festival-ready teaser used in pitch materials and online promotion for the short.",
-    heroImage: '/images/projects/hope-teaser/hero.jpg',
-    imageLayout: 'masonry',
-    images: [],
-    placeholder: true,
+    heroImage: '/images/projects/hope-teaser/hero.jpeg',
+    imageLayout: 'stack',
+    images: [
+      '/images/projects/hope-teaser/hero.jpeg',
+    ],
     link: 'https://youtu.be/1P3ZgLOy-w8?si=B4hdik7KGIfwB0iM',
     linkLabel: 'Watch the Film',
     websiteUrl: 'https://youtu.be/1P3ZgLOy-w8?si=B4hdik7KGIfwB0iM',
@@ -1066,10 +1067,10 @@ export const PROJECTS: Project[] = [
       "Mix of traditional and digital pieces, single-image works and small series. No single house style — the medium and subject drive each piece.",
     outcome:
       "An evolving body of work that feeds back into the rest of the practice.",
-    heroImage: '/images/projects/illustrations/hero.jpg',
+    heroImage: '/images/projects/illustrations/img-1.jpg',
     imageLayout: 'masonry',
+    masonryColumns: { desktop: 3, mobile: 2 },
     images: [
-      '/images/projects/illustrations/img-1.jpg',
       '/images/projects/illustrations/img-2.jpg',
       '/images/projects/illustrations/img-3.jpg',
       '/images/projects/illustrations/img-4.jpg',
@@ -1088,7 +1089,6 @@ export const PROJECTS: Project[] = [
       '/images/projects/illustrations/img-17.jpg',
       '/images/projects/illustrations/img-18.jpg',
     ],
-    placeholder: true,
     link: 'https://www.behance.net/gallery/35205103/Digital-Illustrations',
     linkLabel: 'View on Behance',
     websiteUrl: 'https://www.behance.net/gallery/35205103/Digital-Illustrations',
