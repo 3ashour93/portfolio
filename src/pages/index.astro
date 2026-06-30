@@ -49,7 +49,7 @@ import { PROFILE, PROJECTS, CLIENTS, CATEGORIES } from '../data/projects';
       {PROJECTS.map((p) => {
         const cats = (p.categories && p.categories.length ? p.categories : [p.category]).join('||');
         return (
-          <a class="proj-item" href={`/projects/${p.id}`} data-hero={p.heroImage} data-cats={cats}>
+          <a class="proj-item" href={`/projects/${p.id}`} data-hero={p.heroImage} data-cats={cats} style={`--bg: url(${p.heroImage});`}>
             <svg class="pi-border" preserveAspectRatio="none" aria-hidden="true">
               <rect class="pi-border-rect" x="0" y="0" width="100%" height="100%" fill="none" />
             </svg>
@@ -267,6 +267,7 @@ import { PROFILE, PROJECTS, CLIENTS, CATEGORIES } from '../data/projects';
 }
 .h-foot-col { display: flex; flex-direction: column; gap: 16px; align-items: flex-start; }
 .h-foot-right { align-items: flex-end; }
+.h-foot-right .h-desc { text-align: right; }
 .h-desc { font-size: .6rem; letter-spacing: .16em; text-transform: uppercase; line-height: 2; max-width: 220px; color: var(--muted); transition: color .6s var(--ease); }
 .h-cta {
   font-size: .58rem; letter-spacing: .16em; text-transform: uppercase;
@@ -288,16 +289,37 @@ import { PROFILE, PROJECTS, CLIENTS, CATEGORIES } from '../data/projects';
 @keyframes bar { 0% { transform: scaleY(0); transform-origin: top; } 50% { transform: scaleY(1); transform-origin: top; } 51% { transform-origin: bottom; } 100% { transform: scaleY(0); transform-origin: bottom; } }
 @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
 @media (max-width: 640px) {
-  .h-name { font-size: clamp(3.2rem, 14vw, 5.5rem); }
-  .h-name-row {
-    position: static;
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 0 var(--pad-x) 32px;
-    gap: 0;
+  .h-name { font-size: clamp(3.2rem, 14vw, 5.5rem); line-height: .92; text-align: center; }
+  /* Flatten the two-column structure into a single centered vertical stack:
+     name → name → descs → buttons */
+  .h-content {
+    align-items: center;
+    justify-content: flex-end;
+    text-align: center;
+    gap: 14px;
+    padding-bottom: clamp(48px, 8vh, 80px);
   }
-  .h-foot { flex-direction: column; gap: 28px; }
-  .h-foot-right { align-items: flex-start; }
+  .h-name-row { display: contents; }
+  .h-foot { display: contents; animation: none; }
+  .h-foot-col { display: contents; }
+
+  .h-name-l { order: 1; }
+  .h-name-r { order: 2; margin-bottom: 22px; }
+
+  .h-foot-col:not(.h-foot-right) > .h-desc {
+    order: 3;
+    max-width: none;
+    text-align: center;
+  }
+  .h-foot-right > .h-desc {
+    order: 4;
+    text-align: center;
+    max-width: none;
+    margin-bottom: 18px;
+  }
+  .h-foot-col:not(.h-foot-right) > .h-cta { order: 5; }
+  .h-foot-right > .h-cta { order: 6; }
+
   .h-scroll { display: none; }
 }
 
@@ -396,18 +418,44 @@ import { PROFILE, PROJECTS, CLIENTS, CATEGORIES } from '../data/projects';
   padding: 0;
 }
 .proj-item {
-  background: var(--paper);
+  background-color: var(--ink);
   text-decoration: none;
-  color: var(--ink);
+  color: var(--paper);
   position: relative;
-  overflow: visible;
+  overflow: hidden;
   cursor: none;
-  min-height: 220px;
-  transition: background .4s var(--ease);
+  min-height: 240px;
   /* Default hidden state — JS adds .is-revealed to fade them in */
   opacity: 0;
   transform: translateY(18px);
 }
+/* Image layer — cover-fills the card and is desaturated + darkened for legibility */
+.proj-item::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image: var(--bg);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  filter: grayscale(.55) brightness(.7) contrast(1.05);
+  transform: scale(1.02);
+  transition: transform .9s var(--ease), filter .55s var(--ease);
+  z-index: 0;
+}
+.proj-item:hover::before {
+  transform: scale(1.12);
+  filter: grayscale(.3) brightness(.85) contrast(1.05);
+}
+/* Scrim above image */
+.proj-item::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(10,10,10,.55) 0%, rgba(10,10,10,.62) 45%, rgba(10,10,10,.9) 100%);
+  z-index: 1;
+  transition: opacity .45s var(--ease);
+  pointer-events: none;
+}
+.proj-item:hover::after { opacity: .55; }
 .proj-item.is-revealed {
   animation: pi-reveal 600ms cubic-bezier(.25, .65, .35, 1) forwards;
   animation-delay: var(--reveal-delay, 0ms);
@@ -476,59 +524,53 @@ import { PROFILE, PROJECTS, CLIENTS, CATEGORIES } from '../data/projects';
   100% { opacity: 0; }
 }
 
-.proj-item::before {
-  content: '';
-  position: absolute; inset: 0;
-  background: var(--ink);
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform .55s var(--ease);
-  z-index: 0;
-}
-.proj-item:hover::before { transform: scaleX(1); }
-.proj-item > *:not(.pi-arr):not(.pi-border) { position: relative; z-index: 1; transition: color .3s; }
-.pi-arr { position: absolute; z-index: 2; }
+.proj-item > *:not(.pi-arr):not(.pi-border) { position: relative; z-index: 2; transition: color .3s; }
+.pi-arr { position: absolute; z-index: 3; }
 
 .pi-num {
   font-family: var(--f-ser);
   font-size: clamp(1.2rem, 2vw, 1.8rem);
   font-weight: 300;
   font-style: italic;
-  color: rgba(10,10,10,.15);
+  color: rgba(249,249,247,.35);
   line-height: 1;
   margin-bottom: 16px;
+  text-shadow: 0 1px 4px rgba(0,0,0,.3);
 }
-.proj-item:hover .pi-num { color: rgba(249,249,247,.1); }
+.proj-item:hover .pi-num { color: rgba(249,249,247,.6); }
 
 .pi-content { flex: 1; }
 .pi-cat {
   font-size: .48rem;
   letter-spacing: .2em;
   text-transform: uppercase;
-  color: var(--muted);
+  color: var(--accent);
   margin-bottom: 8px;
+  text-shadow: 0 1px 4px rgba(0,0,0,.3);
 }
-.proj-item:hover .pi-cat { color: rgba(249,249,247,.4); }
+.proj-item:hover .pi-cat { color: var(--accent); }
 
 .pi-title {
   font-family: var(--f-ser);
-  font-size: clamp(1.05rem, 1.8vw, 1.4rem);
+  font-size: clamp(1.1rem, 1.9vw, 1.5rem);
   font-weight: 600;
   letter-spacing: -.01em;
   line-height: 1.2;
-  color: var(--ink);
+  color: var(--paper);
   margin-bottom: 10px;
+  text-shadow: 0 2px 8px rgba(0,0,0,.45);
 }
 .proj-item:hover .pi-title { color: var(--paper); }
 
 .pi-meta {
   font-size: .5rem;
   letter-spacing: .1em;
-  color: var(--muted);
+  color: rgba(249,249,247,.7);
   margin-bottom: 12px;
   line-height: 1.4;
+  text-shadow: 0 1px 4px rgba(0,0,0,.4);
 }
-.proj-item:hover .pi-meta { color: rgba(249,249,247,.3); }
+.proj-item:hover .pi-meta { color: rgba(249,249,247,.85); }
 
 .pi-badge {
   display: inline-block;
@@ -536,9 +578,10 @@ import { PROFILE, PROJECTS, CLIENTS, CATEGORIES } from '../data/projects';
   letter-spacing: .14em;
   text-transform: uppercase;
   padding: 4px 9px;
-  background: var(--ink);
-  color: var(--paper);
+  background: var(--accent);
+  color: var(--ink);
   transition: background .3s, color .3s;
+  font-weight: 700;
 }
 .proj-item:hover .pi-badge { background: var(--paper); color: var(--ink); }
 
@@ -546,10 +589,11 @@ import { PROFILE, PROJECTS, CLIENTS, CATEGORIES } from '../data/projects';
   font-size: .48rem;
   letter-spacing: .15em;
   text-transform: uppercase;
-  color: var(--muted);
+  color: rgba(249,249,247,.55);
   margin-top: 12px;
+  text-shadow: 0 1px 4px rgba(0,0,0,.4);
 }
-.proj-item:hover .pi-year { color: rgba(249,249,247,.3); }
+.proj-item:hover .pi-year { color: rgba(249,249,247,.8); }
 
 .pi-arr {
   position: absolute;
@@ -557,7 +601,10 @@ import { PROFILE, PROJECTS, CLIENTS, CATEGORIES } from '../data/projects';
   bottom: clamp(8px, 1.5vw, 14px);
   width: 36px;
   height: 36px;
-  border: 1px solid var(--rule);
+  border: 1px solid rgba(249,249,247,.4);
+  color: var(--paper);
+  background: rgba(10,10,10,.35);
+  backdrop-filter: blur(4px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -565,8 +612,8 @@ import { PROFILE, PROJECTS, CLIENTS, CATEGORIES } from '../data/projects';
   transition: background .4s, border-color .4s, transform .5s var(--ease), color .4s;
 }
 .proj-item:hover .pi-arr {
-  background: var(--paper);
-  border-color: var(--paper);
+  background: var(--accent);
+  border-color: var(--accent);
   color: var(--ink);
   transform: rotate(-42deg);
 }
@@ -683,7 +730,7 @@ import { PROFILE, PROJECTS, CLIENTS, CATEGORIES } from '../data/projects';
 #contact { background: var(--paper); padding: var(--pad-y) var(--pad-x); border-top: 1px solid var(--rule); }
 .ct-inner { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(40px, 8vw, 100px); }
 .ct-big { font-family: var(--f-ser); font-size: clamp(2.8rem, 7vw, 8rem); font-weight: 300; line-height: .88; letter-spacing: -.04em; color: var(--ink); margin-top: 20px; }
-.ct-big em { font-style: italic; display: block; }
+.ct-big em { font-style: italic; display: block; color: var(--accent); }
 .ct-right { padding-top: clamp(20px, 4vw, 60px); }
 .ct-row { display: flex; justify-content: space-between; align-items: center; padding: 18px 0; border-bottom: 1px solid var(--rule); text-decoration: none; color: var(--ink); transition: padding-left .4s var(--ease); cursor: none; gap: 12px; }
 .ct-row:hover { padding-left: 12px; }

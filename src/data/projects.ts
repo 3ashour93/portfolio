@@ -1071,6 +1071,7 @@ export const PROJECTS: Project[] = [
     imageLayout: 'masonry',
     masonryColumns: { desktop: 3, mobile: 2 },
     images: [
+      '/images/projects/illustrations/img-1.jpg',
       '/images/projects/illustrations/img-2.jpg',
       '/images/projects/illustrations/img-3.jpg',
       '/images/projects/illustrations/img-4.jpg',
