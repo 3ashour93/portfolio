@@ -160,7 +160,14 @@ import { PROFILE, PROJECTS, CLIENTS, CATEGORIES } from '../data/projects';
   <div class="cl-text-grid r">
     {CLIENTS.map((c, i) => (
       <div class="cl-text-item">
-        <div class="cl-n">0{i + 1}</div>
+        <div class="cl-n">{String(i + 1).padStart(2, '0')}</div>
+        {c.logos && c.logos.length > 0 && (
+          <div class="cl-logos">
+            {c.logos.map((f) => (
+              <img class="cl-logo" src={`/images/clients/${f}`} alt={c.name} loading="lazy" onerror="this.remove()" />
+            ))}
+          </div>
+        )}
         <div class="cl-name">{c.name}</div>
         <div class="cl-type">{c.type}</div>
       </div>
@@ -716,13 +723,16 @@ import { PROFILE, PROJECTS, CLIENTS, CATEGORIES } from '../data/projects';
 #clients { background: var(--paper); }
 .cl-text-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--rule); border: 1px solid var(--rule); }
 .cl-text-item { background: var(--paper); padding: clamp(20px, 3vw, 32px); transition: background .3s; }
-.cl-text-item:hover { background: var(--ink); }
+.cl-text-item:hover { background: #efefec; }
 .cl-n { font-size: .46rem; letter-spacing: .2em; color: var(--muted); margin-bottom: 12px; }
-.cl-text-item:hover .cl-n { color: rgba(249,249,247,.25); }
+.cl-text-item:hover .cl-n { color: var(--accent); }
 .cl-name { font-family: var(--f-ser); font-size: clamp(.88rem, 1.4vw, 1rem); font-weight: 600; line-height: 1.3; color: var(--ink); margin-bottom: 8px; }
-.cl-text-item:hover .cl-name { color: var(--paper); }
+.cl-text-item:hover .cl-name { color: var(--ink); }
+.cl-logos { display: flex; align-items: center; gap: 18px; height: 68px; margin-bottom: 18px; }
+.cl-logo { display: block; height: 40px; width: auto; max-width: 100%; object-fit: contain; transition: transform .4s var(--ease); transform-origin: left center; }
+.cl-text-item:hover .cl-logo { transform: scale(1.04); }
 .cl-type { font-size: .46rem; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); }
-.cl-text-item:hover .cl-type { color: rgba(249,249,247,.3); }
+.cl-text-item:hover .cl-type { color: var(--muted); }
 @media (max-width: 900px) { .cl-text-grid { grid-template-columns: 1fr 1fr; } }
 @media (max-width: 480px) { .cl-text-grid { grid-template-columns: 1fr; } }
 
@@ -748,6 +758,20 @@ const obs = new IntersectionObserver(
   { threshold: 0.08 }
 );
 document.querySelectorAll('.r').forEach((el) => obs.observe(el));
+
+// Client logos: size each logo by area, not height, so wide wordmarks and square seals read at the same visual weight
+const sizeLogo = (img) => {
+  const w = img.naturalWidth, h = img.naturalHeight;
+  if (!w || !h) return;
+  const pair = img.parentElement && img.parentElement.children.length > 1;
+  const area = pair ? 1800 : 2900;              // target area in px²
+  let height = Math.sqrt(area / (w / h));
+  height = Math.min(Math.max(height, 22), 64);  // keep within the 68px row
+  img.style.height = height.toFixed(1) + 'px';
+};
+document.querySelectorAll('.cl-logo').forEach((img) => {
+  if (img.complete) sizeLogo(img); else img.addEventListener('load', () => sizeLogo(img));
+});
 
 // Hero scroll-driven dark sweep (same feel as project row hover)
 const hero = document.getElementById('hero');

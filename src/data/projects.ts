@@ -85,18 +85,18 @@ export const PROFILE = {
 };
 
 export const CLIENTS = [
-  { name: 'Qatar International Court (QICDRC)', type: 'Legal Institution', url: 'https://qicdrc.gov.qa' },
-  { name: 'Ministry of Justice — Qatar', type: 'Government', url: '' },
-  { name: 'Ministry of Finance — Qatar', type: 'Government', url: '' },
-  { name: 'Asian Football Confederation', type: 'Sports & Events', url: 'https://www.the-afc.com' },
-  { name: 'Design Doha Biennial', type: 'Design & Culture', url: '' },
-  { name: 'Education Above All', type: 'Non-Profit', url: 'https://educationaboveall.org' },
-  { name: 'beIN SPORTS × TOD', type: 'Media & Broadcast', url: '' },
-  { name: 'SkipCash', type: 'Fintech', url: '' },
-  { name: 'US Embassy — Doha', type: 'Diplomatic', url: '' },
-  { name: 'Aspire Zone Foundation', type: 'Sports & Wellness', url: '' },
-  { name: 'Fairmont & Raffles Doha', type: 'Hospitality', url: '' },
-  { name: 'Action Global Communications', type: 'PR & Comms', url: '' },
+  { name: 'Qatar International Court (QICDRC)', type: 'Legal Institution', url: 'https://qicdrc.gov.qa', logos: ['qicdrc.png'] },
+  { name: 'Ministry of Justice — Qatar', type: 'Government', url: '', logos: ['moj.png'] },
+  { name: 'Ministry of Finance — Qatar', type: 'Government', url: '', logos: ['mof.png'] },
+  { name: 'Asian Football Confederation', type: 'Sports & Events', url: 'https://www.the-afc.com', logos: ['afc-asian-cup-2023.png'] },
+  { name: 'Design Doha Biennial', type: 'Design & Culture', url: '', logos: ['design-doha.svg'] },
+  { name: 'Education Above All', type: 'Non-Profit', url: 'https://educationaboveall.org', logos: ['eaa.png'] },
+  { name: 'beIN SPORTS × TOD', type: 'Media & Broadcast', url: '', logos: ['bein.png', 'tod.svg'] },
+  { name: 'SkipCash', type: 'Fintech', url: '', logos: ['skipcash.png'] },
+  { name: 'US Embassy — Doha', type: 'Diplomatic', url: '', logos: ['us-embassy.png'] },
+  { name: 'Aspire Zone Foundation', type: 'Sports & Wellness', url: '', logos: ['aspire.png'] },
+  { name: 'Fairmont & Raffles Doha', type: 'Hospitality', url: '', logos: ['fairmont-doha.svg', 'raffles-doha.svg'] },
+  { name: 'Action Global Communications', type: 'PR & Comms', url: '', logos: ['action-global.svg'] },
 ];
 
 export const PROJECTS: Project[] = [
