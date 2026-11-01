@@ -88,10 +88,10 @@ import { PROFILE, PROJECTS, CLIENTS, CATEGORIES } from '../data/projects';
   </div>
   <div class="about-grid">
     <div class="ab-left r">
-      <p class="ab-tagline">8 years. Governments, federations, and institutions across the region.</p>
+      <p class="ab-tagline">9+ years. Governments, federations, and institutions across the region.</p>
       <div class="ab-body">
         <p>I direct brand strategy and visual identity for organisations where the work actually matters. Institutional communications, major events, and digital products — built to last and built to scale.</p>
-        <p>Recent work includes the <strong>Doha Legal Forum 2026</strong> identity signed off by Qatar's Minister of Justice, the <strong>SIFoCC</strong> conference brand for the world's largest gathering of commercial courts, and broadcast graphics for the <strong>AFC Asian Cup</strong>.</p>
+        <p>Recent work includes the <strong>Doha Legal Forum 2026</strong> identity signed off by Qatar's Minister of Justice, the <strong>SIFoCC</strong> identity for the forum's first meeting in the MENA region, and broadcast graphics for the <strong>AFC Asian Cup</strong>.</p>
         <p>MSc Digital Media Design, University of Edinburgh · BSc Media & Communications, Northwestern University in Qatar · Minor in Computer Science, Carnegie Mellon University in Qatar.</p>
       </div>
       <div class="ab-tags r d1">
@@ -121,7 +121,7 @@ import { PROFILE, PROJECTS, CLIENTS, CATEGORIES } from '../data/projects';
         </div>
         <div class="ab-fact">
           <span class="ab-fact-k">Experience</span>
-          <span class="ab-fact-v">8+ Years</span>
+          <span class="ab-fact-v">9+ Years</span>
         </div>
         <div class="ab-fact">
           <span class="ab-fact-k">Current Role</span>
@@ -759,18 +759,21 @@ const obs = new IntersectionObserver(
 );
 document.querySelectorAll('.r').forEach((el) => obs.observe(el));
 
-// Client logos: size each logo by area, not height, so wide wordmarks and square seals read at the same visual weight
-const sizeLogo = (img) => {
-  const w = img.naturalWidth, h = img.naturalHeight;
-  if (!w || !h) return;
-  const pair = img.parentElement && img.parentElement.children.length > 1;
-  const area = pair ? 1800 : 2900;              // target area in px²
-  let height = Math.sqrt(area / (w / h));
-  height = Math.min(Math.max(height, 22), 64);  // keep within the 68px row
-  img.style.height = height.toFixed(1) + 'px';
+// Client logos: size by area, not height, so wide wordmarks and square seals read at the same visual weight.
+// Logos that share a card (beIN × TOD, Fairmont × Raffles) get one shared height so they sit on the same line.
+const sizeLogoGroup = (box) => {
+  const imgs = [...box.querySelectorAll('.cl-logo')];
+  if (!imgs.length || imgs.some((i) => !i.naturalWidth || !i.naturalHeight)) return;
+  const ratio = imgs.reduce((sum, i) => sum + i.naturalWidth / i.naturalHeight, 0);
+  const area = imgs.length > 1 ? 4800 : 3700;   // target area in px² for the whole group
+  let height = Math.sqrt(area / ratio);
+  height = Math.min(Math.max(height, 28), 64);  // keep within the 68px row
+  imgs.forEach((i) => { i.style.height = height.toFixed(1) + 'px'; });
 };
-document.querySelectorAll('.cl-logo').forEach((img) => {
-  if (img.complete) sizeLogo(img); else img.addEventListener('load', () => sizeLogo(img));
+document.querySelectorAll('.cl-logos').forEach((box) => {
+  box.querySelectorAll('.cl-logo').forEach((img) => {
+    if (img.complete) sizeLogoGroup(box); else img.addEventListener('load', () => sizeLogoGroup(box));
+  });
 });
 
 // Hero scroll-driven dark sweep (same feel as project row hover)

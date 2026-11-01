@@ -115,7 +115,7 @@ export const PROJECTS: Project[] = [
     teaser:
       'Complete brand identity for a flagship government legal conference, formally approved by the Minister of Justice of Qatar.',
     overview:
-      "The Doha Legal Forum is one of Qatar's most significant biannual legal conferences, co-produced by QICDRC and the Ministry of Justice. Commissioned as sole creator of the entire identity — from initial concept through final delivery across all event touchpoints.",
+      "The inaugural Doha Legal Forum (January 2026), co-organised by QICDRC and the Ministry of Justice, was opened by Qatar's Prime Minister. Commissioned as sole creator of the entire identity — from initial concept through final delivery across all event touchpoints.",
     brief:
       "The identity needed to carry institutional authority while feeling forward-looking and international. It had to scale from stage backdrops and signage to digital platforms and printed programmes — all under the scrutiny of two of Qatar's most prominent legal institutions.",
     approach:
@@ -140,7 +140,7 @@ export const PROJECTS: Project[] = [
   {
     id: 'qicdrc',
     num: '02',
-    badge: '8-Year Institutional Partnership',
+    badge: '9+ Year Institutional Partnership',
     title: 'QICDRC Branding',
     client: 'Qatar International Court & Dispute Resolution Centre',
     category: 'Brand Identity · UI/UX · AR',
@@ -150,15 +150,15 @@ export const PROJECTS: Project[] = [
     tools: ['Figma', 'Illustrator', 'InDesign', 'After Effects', 'Adobe XD', 'AR Kit'],
     tags: ['Brand Identity', 'Brand Guidelines', 'Web Design', 'UI/UX Design', 'Print Design', 'Editorial Design', 'AR Design', 'Motion Design', 'Animation', 'Video Editing', 'Social Media Design', 'Creative Direction'],
     teaser:
-      "Eight years of institutional design across brand, web, eCourt platform, AR publications, events, gifts, and social — a comprehensive visual system for Qatar's primary international legal court.",
+      "Nine years of institutional design across brand, web, eCourt platform, AR publications, events, gifts, and social — a comprehensive visual system for the Qatar International Court and Dispute Resolution Centre.",
     overview:
-      "A multi-year, multi-disciplinary partnership with QICDRC — Qatar's leading international arbitration court. This mega-project gathers everything produced for the institution: brand system refresh, the website, the eCourt case management platform, the AR-enhanced 10th anniversary commemorative publication, institutional gifts, international conference booths, social content, and events.",
+      "A multi-year, multi-disciplinary partnership with QICDRC — the Qatar International Court and Dispute Resolution Centre, comprising the Civil and Commercial Court, the Regulatory Tribunal, and the Dispute Resolution Centre. This mega-project gathers everything produced for the institution: brand system refresh, the website, the eCourt case management platform, the AR-enhanced 10th anniversary commemorative publication, institutional gifts, international conference booths, social content, and events.",
     brief:
-      "Unify an eight-year body of institutional work under a coherent visual system that scales from stationery to digital products, from printed programmes to augmented-reality publications — all while carrying the weight of a court serving legal practitioners globally.",
+      "Unify a nine-year body of institutional work under a coherent visual system that scales from stationery to digital products, from printed programmes to augmented-reality publications — all while carrying the weight of a court serving legal practitioners globally.",
     approach:
       'Rather than treat each piece in isolation, I built a shared visual vocabulary — typography, color, component logic, bilingual rules — that governs every output. Each deliverable (brand, web, eCourt, AR book, gifts, social) inherits from the same system and extends it for its medium.',
     outcome:
-      "A fully documented institutional identity deployed across web, app, print, AR, social, and events — serving thousands of legal practitioners and delivered consistently over nearly a decade of engagement.",
+      "A fully documented institutional identity deployed across web, app, print, AR, social, and events — delivered consistently over nearly a decade of engagement.",
     heroImage: '/images/projects/qicdrc-brand/hero.jpg',
     imageLayout: 'masonry',
     images: [],
@@ -168,7 +168,7 @@ export const PROJECTS: Project[] = [
         title: 'Brand System',
         subtitle: 'Refreshed identity · bilingual system · full guidelines',
         body:
-          "A full brand refresh integrating newly launched services into a coherent, scalable visual identity. Audited eight years of touchpoints, identified inconsistencies, and built a flexible system — typography, color, component logic — documented in a comprehensive bilingual brand guideline.",
+          "A full brand refresh integrating newly launched services into a coherent, scalable visual identity. Audited years of existing touchpoints, identified inconsistencies, and built a flexible system — typography, color, component logic — documented in a comprehensive bilingual brand guideline.",
         imageLayout: 'masonry',
         masonryColumns: { desktop: 1, mobile: 1 },
         images: [
@@ -391,19 +391,19 @@ export const PROJECTS: Project[] = [
     client: 'QICDRC',
     category: 'Conference Branding',
     categories: ['Brand Identity', 'Editorial · Print'],
-    year: '2022',
+    year: '2024',
     role: 'Senior Branding Specialist',
     tools: ['InDesign', 'Illustrator', 'After Effects'],
     tags: ['Brand Identity', 'Logo Design', 'Brand Guidelines', 'Event Branding', 'Print Design', 'Editorial Design', 'Stationery', 'Wayfinding'],
-    teaser: "Full visual identity for the world's largest international court conference.",
+    teaser: "Full event identity for the 5th Full Meeting of SIFoCC — hosted by QICDRC in Doha, the first time in the MENA region.",
     overview:
-      "SIFoCC — the Standing International Forum of Commercial Courts — is the world's largest international court conference. Directed all event branding and visual communications.",
+      "SIFoCC — the Standing International Forum of Commercial Courts — brings together commercial courts from around the world. In April 2024 QICDRC hosted its 5th Full Meeting in Doha, the first time the forum met in the MENA region. Directed all event branding and visual communications.",
     brief:
       'Bring together chief justices and senior judges from commercial courts globally under a visual identity that carries institutional weight while feeling modern.',
     approach:
       'Complete event identity — stage design, signage, digital screens, printed programmes, name badges, and all collateral — working at both intimate and large-scale formats simultaneously.',
     outcome:
-      'The conference was delivered to its highest attendance, with the visual identity praised for its coherence across all event surfaces.',
+      'Delivered a cohesive event identity across every surface of the 5th Full Meeting — from stage and screens to signage, print, and collateral — for chief justices and senior judges attending from around the world.',
     heroImage: '/images/projects/sifocc/hero.jpg',
     imageLayout: 'masonry',
     images: [
@@ -450,9 +450,9 @@ export const PROJECTS: Project[] = [
       '/images/projects/qatar-law-forum/img-3.jpg',
       '/images/projects/qatar-law-forum/img-4.jpg',
     ],
-    link: 'https://www.qatarlawforum.org',
+    link: 'https://www.qatarlawforum.com/previous-editions/2017',
     linkLabel: 'View Website',
-    websiteUrl: 'https://www.qatarlawforum.org',
+    websiteUrl: 'https://www.qatarlawforum.com/previous-editions/2017',
     next: 'ehaf',
   },
 
@@ -461,7 +461,7 @@ export const PROJECTS: Project[] = [
     num: '07',
     badge: '9 Pages · 800+ Images',
     title: 'EHAF Consulting Engineers',
-    client: 'EHAF — Qatar',
+    client: 'Qatar Consulting Engineering Services — EHAF',
     category: 'Web Design · Web Development',
     categories: ['Web Design', 'UI / UX'],
     year: '2018',
@@ -617,7 +617,7 @@ export const PROJECTS: Project[] = [
     approach:
       'Developed a warm, artisan visual identity with a considered colour palette and hand-crafted typographic sensibility. Applied it across all customer touchpoints: product packaging designed for both function and shelf presence, and a social media template system that keeps the feed cohesive while giving each post room to breathe.',
     outcome:
-      'Soul Broth launched with a brand identity that punches well above its home-kitchen origins — with packaging that stands out and an Instagram presence that converts browsers into loyal customers.',
+      'A complete brand identity and packaging system for a homemade broth business — giving a home-kitchen brand a consistent, professional look across its products and Instagram.',
     heroImage: '/images/projects/soul-broth/hero.jpg',
     imageLayout: 'stack',
     images: [
@@ -681,7 +681,7 @@ export const PROJECTS: Project[] = [
     tags: ['Motion Design', 'Animation', 'Infographic Design', 'Concept Development', 'Art Direction', 'Campaign Design'],
     teaser: "Animated infographic campaign for Education Above All's Educate A Child programme — shown in-flight on Qatar Airways.",
     overview:
-      "In collaboration with Qatar Airways and Education Above All, I designed and animated captivating infographic segments for the 'Educate A Child' campaign video — showcased on Qatar Airways flights to inspire passengers to support the initiative. Through engaging visuals and concise storytelling, the piece highlights the importance of education and the impact of a programme that has enrolled over 5 million out-of-school children since 2012.",
+      "In collaboration with Qatar Airways and Education Above All, I designed and animated captivating infographic segments for the 'Educate A Child' campaign video — showcased on Qatar Airways flights to inspire passengers to support the initiative. Through engaging visuals and concise storytelling, the piece highlights the importance of education and the impact of a programme that, by 2017, had enrolled over 5 million out-of-school children since its 2012 launch.",
     brief:
       "Communicate a complex global education initiative — numbers, geographic reach, and human impact — in a single animated piece that would hold a captive in-flight audience and move them to donate via the seat-pocket envelope.",
     approach:
@@ -722,7 +722,7 @@ export const PROJECTS: Project[] = [
     approach:
       "Designed three user personas first (casual browser, illustrator/designer, knowledge contributor) and let each one drive a distinct page archetype. Built the visual identity around a Double Octagon motif and a single signature teal (#98D5D8). Implemented the platform on PHP / Fat-Free Framework with a five-table MySQL schema, async JavaScript for live search and pattern loading, GSAP for the homepage motion, P5.js for the generators, SVG.js for the step-by-step tutorial viewer, and Driver.js for in-page onboarding. Passwords are hashed, queries are prepared, admin moderation gates every community submission.",
     outcome:
-      "A live, public, production-quality platform — gallery, generators, contributor system, admin pipeline, and brand all working together. Exhibited as part of the MSc thesis at the University of Edinburgh.",
+      "A full, working, production-quality platform — gallery, generators, contributor system, admin pipeline, and brand all working together. Exhibited as part of the MSc thesis at the University of Edinburgh.",
     heroImage: '/images/projects/arabesque/hero.jpg',
     imageLayout: 'masonry',
     images: [],
@@ -839,19 +839,19 @@ export const PROJECTS: Project[] = [
         ],
       },
     ],
-    link: 'https://s2273345.edinburgh.domains/Arabesque/',
-    linkLabel: 'View Live Project',
-    websiteUrl: 'https://s2273345.edinburgh.domains/Arabesque/',
-    websiteLabel: 'View Live Project',
+    link: 'https://www.2024.graduateshow.eca.ed.ac.uk/portfolio/omar-ashour',
+    linkLabel: 'View on Edinburgh Graduate Show',
+    websiteUrl: 'https://www.2024.graduateshow.eca.ed.ac.uk/portfolio/omar-ashour',
+    websiteLabel: 'View on Edinburgh Graduate Show',
     next: 'creative-coding',
   },
 
   {
     id: 'creative-coding',
     num: '15',
-    badge: 'MSc Coursework · NYU Capstone · Interactive',
+    badge: 'MSc Coursework · NYU MicroMasters Capstone · Interactive',
     title: 'Creative Coding',
-    client: 'University of Edinburgh · NYU Abu Dhabi',
+    client: 'University of Edinburgh · NYU MicroMasters',
     category: 'Creative Coding · Interactive',
     categories: ['Creative Coding', 'Web Design', 'Motion / Animation'],
     year: '2022–2024',
@@ -860,7 +860,7 @@ export const PROJECTS: Project[] = [
     tags: ['Web Design', 'Web Development', 'Motion Design', 'Interactive Design', 'Concept Development', 'Art Direction'],
     teaser: "Thesis and capstone work exploring code as a design medium — point clouds, typography, data, and generative systems.",
     overview:
-      "A multi-project sandbox of creative coding work across my MSc at the University of Edinburgh and my BSc Capstone at NYU Abu Dhabi. Each piece explores a different use of code as a design medium — from LiDAR-scanned sculptural point clouds to live Arabic typography translation, an interactive public-health platform, and generative p5.js experiments.",
+      "A multi-project sandbox of creative coding work across my MSc at the University of Edinburgh and my capstone for the NYU Integrated Digital Media MicroMasters. Each piece explores a different use of code as a design medium — from LiDAR-scanned sculptural point clouds to live Arabic typography translation, an interactive public-health platform, and generative p5.js experiments.",
     brief:
       "Use creative coding to investigate ideas that would be impossible or tedious to hand-draw — generative systems, interactive behaviour, responsive typography, 3D point-cloud spaces, and data-rich web experiences.",
     approach:
@@ -895,7 +895,7 @@ export const PROJECTS: Project[] = [
       {
         id: 'arabic-type',
         title: 'Interact with Arabic Type!',
-        subtitle: 'NYU Abu Dhabi Capstone · 2022 · Three.js',
+        subtitle: 'NYU MicroMasters Capstone · 2022 · Three.js',
         body:
           "A live bilingual typography experiment built in Three.js — users type English words and watch them translate, letter-by-letter, into Arabic as 3D glyphs swarm across the canvas. Designed to spark curiosity about the Arabic language through play rather than pedagogy.",
         embeds: [
@@ -925,7 +925,7 @@ export const PROJECTS: Project[] = [
       {
         id: 'p5-experiments',
         title: 'Creative Coding Experiments',
-        subtitle: 'NYU Abu Dhabi · p5.js · Generative + Game',
+        subtitle: 'NYU MicroMasters · p5.js · Generative + Game',
         body:
           "A rotating set of p5.js sketches — generative polygons, parametric harmonographs with live parameter controls, and a small platformer game. Each sketch isolates a different code-as-design instinct: rhythm, randomness, interactivity, and play.",
         embeds: [
@@ -963,22 +963,22 @@ export const PROJECTS: Project[] = [
     num: '16',
     badge: '',
     title: 'Hope — Short Film Teaser',
-    client: 'Independent Short Film',
+    client: "GreenTree Production",
     category: 'Motion / Animation',
     categories: ['Motion / Animation'],
-    year: '2022',
+    year: "2020",
     role: 'Teaser Editor',
     tools: ['Premiere Pro', 'After Effects', 'DaVinci Resolve'],
     tags: ['Video Editing', 'Motion Design', 'Concept Development'],
-    teaser: "Teaser edit for an independent short film exploring resilience through a single night.",
+    teaser: "Teaser for 'Hope' (2020), a GreenTree Production short film following Aqua, a newborn sea turtle, on his journey to the sea.",
     overview:
-      "Created the teaser for 'Hope', an independent short film I was brought on to as the teaser editor. The teaser distils the film's mood and central question into a 60-second cut designed for festival pitches and social — separate from the feature itself.",
+      "Created the teaser for 'Hope', a 2020 short film by GreenTree Production, written and directed by Abdulla Al Janahi. The film follows Aqua, a newborn sea turtle, as he faces human pollution and predators on his way to the sea. The teaser introduces the story and its mood ahead of the film's release.",
     brief:
-      "Produce a teaser that communicates tone, scale, and stakes — without revealing the story — for use in festival submissions, pitch decks, and social previews.",
+      "Introduce the film's story and tone in a short teaser — building anticipation without giving away the ending.",
     approach:
-      "Built the edit around rhythm and withheld information — a handful of carefully chosen visual beats, a restrained sound design, and an ending that asks the viewer to lean in rather than tying off.",
+      "Built the edit around rhythm and withheld information — a handful of carefully chosen visual beats and an ending that leaves the viewer wanting to see the rest of Aqua's journey.",
     outcome:
-      "Delivered a festival-ready teaser used in pitch materials and online promotion for the short.",
+      "Delivered the teaser used to promote the film online ahead of its release.",
     heroImage: '/images/projects/hope-teaser/hero.jpeg',
     imageLayout: 'stack',
     images: [
@@ -1021,7 +1021,7 @@ export const PROJECTS: Project[] = [
         title: 'Revenge Knows Nothing',
         subtitle: 'GreenTree Productions · 2021 · Animated Short · Doha + Bahrain',
         body:
-          "Collaborated with GreenTree Productions on the screenwriting and full storyboarding of 'Revenge Knows Nothing' — a creative story about injustice and how violence begets violence, told through the eyes of an elephant family. A project dear to me that delivers a difficult perspective in a form that welcomes every age. Co-written with Abdulla Janahi and co-directed by Abdulla Janahi and Abdulaziz Khanbabi. The finished animated short is available on YouTube.",
+          "Collaborated with GreenTree Productions on the screenwriting and full storyboarding of 'Revenge Knows Nothing' — a creative story about injustice and how violence begets violence, told through the eyes of an elephant family. A project dear to me that delivers a difficult perspective in a form that welcomes every age. Co-written with Abdulla Janahi and co-directed by Abdulla Janahi and Abdulaziz Khashabi. The finished animated short is available on YouTube.",
         imageLayout: 'stack',
         images: [
           '/images/projects/storyboarding/revenge-board.jpg',

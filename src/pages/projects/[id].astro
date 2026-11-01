@@ -113,7 +113,10 @@ const nextProject = PROJECTS[currentIndex < PROJECTS.length - 1 ? currentIndex +
   )}
 
   <!-- Sections (mega-projects) -->
-  {p.sections && p.sections.map((sec) => {
+  {p.sections && p.sections
+    // Hide sections that have nothing to show yet (e.g. a video slot with no video)
+    .filter((sec) => (sec.images && sec.images.length) || (sec.embeds && sec.embeds.length) || sec.video)
+    .map((sec) => {
     const hasEmbeds = sec.embeds && sec.embeds.length > 0;
     return (
     <section class="proj-section r" id={sec.id}>
@@ -247,6 +250,14 @@ const nextProject = PROJECTS[currentIndex < PROJECTS.length - 1 ? currentIndex +
 
 </Layout>
 
+<style is:global>
+/* Project pages open on a dark hero: keep the nav readable until it pins to the light bar */
+body:has(#proj-hero) nav:not(.pinned) .n-logo,
+body:has(#proj-hero) nav:not(.pinned) .n-back { color: var(--paper); }
+body:has(#proj-hero) nav:not(.pinned) .n-cta { color: var(--paper); border-color: rgba(249,249,247,.6); }
+body:has(#proj-hero) nav:not(.pinned) .n-cta:hover { color: var(--ink); border-color: var(--accent); }
+</style>
+
 <style>
 /* ── PROJECT HERO ── */
 #proj-hero {
@@ -264,7 +275,7 @@ const nextProject = PROJECTS[currentIndex < PROJECTS.length - 1 ? currentIndex +
 }
 .ph-cat {
   font-size: .52rem; letter-spacing: .26em; text-transform: uppercase;
-  color: rgba(249,249,247,.35); margin-bottom: 20px;
+  color: rgba(249,249,247,.6); margin-bottom: 20px;
   display: flex; align-items: center; gap: 12px;
   animation: up .8s var(--ease) .15s both;
 }
@@ -345,7 +356,7 @@ const nextProject = PROJECTS[currentIndex < PROJECTS.length - 1 ? currentIndex +
   animation: up .9s var(--ease) .5s both;
 }
 .pm { padding: 16px 0; }
-.pm-k { font-size: .48rem; letter-spacing: .22em; text-transform: uppercase; color: rgba(249,249,247,.25); margin-bottom: 8px; }
+.pm-k { font-size: .48rem; letter-spacing: .22em; text-transform: uppercase; color: rgba(249,249,247,.55); margin-bottom: 8px; }
 .pm-v { font-family: var(--f-ser); font-size: .9rem; font-weight: 600; color: var(--paper); line-height: 1.4; }
 @keyframes up { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
 @media (max-width: 640px) { .ph-meta { grid-template-columns: 1fr 1fr; } }
